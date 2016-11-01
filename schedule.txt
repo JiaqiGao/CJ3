@@ -1,0 +1,30 @@
+Tues Nov 1
+   Class: Continue with the workplan created the day before (c+pasted below). Make sure all necessary files have been created (even if they're empty). Plan out how stories are being stored (is each story getting its own database or are we modifying our database schema to include a column for story id?)  
+   Homework: 
+     * Jordan: Create new story--just text of the story (create.html)  
+     * Chloe: Basic login/registration (app.py, home.html, register.html,  login.html)
+     * James: Ability to contribute to existing story (update.html, you reach this file by redirecting from a button from home.html). Start creating HTML files with Jinja templates. 
+
+Wed Nov 2
+   Class: Ensure site redirects properly from register/login -> homepage -> read story -> create story/contribute story (connect the files)
+   Homework:
+     Fix anything buggy from previous assignments 
+     * Jordan: Start to add addition info to database when users create a new story (i.e. author id, author, last_update count, see DESIGN) and when users contribute to existing stories
+     * Chloe: Add sessions to save user login data, add a logout button
+     * James: Adjust code such that contribute ability only applies if user is logged in.
+
+Thur Nov 3
+   Class: Check up on what has been completed by running through what we currently have and address any problems. Finish anything not completed the night before.
+   Homework:
+     Fix anything buggy from previous assignments
+     * Jordan: Work on how only the last contribution of a story is displayed in the homepage   
+     * Chloe: Add rules to account registration (for ^ security purposes) 
+     * James: Work on how all the stories get displayed in home.html 
+     * Jiaqi: Create a navigation bar with links to redirect users to places they want to be (this will exist on every page after login/register)
+
+Fri Nov 4
+   Class: Check up on what has been completed/Run through. Address any problems, finish anything incompleted from previous assignments
+   Homework:
+     Fix anything buggy from previous assignments
+     [Main structure of site will be completed by Friday 12:00AM so that the weekend can be reserved for additional components]
+     TBA 
