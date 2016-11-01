@@ -2,6 +2,22 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import random, hashlib
 
+import sqlite3
+
+#create the database
+database = "data.db"
+
+#add to the database
+db = sqlite3.connect(database)
+#create a users table
+c.execute("CREATE TABLE users (id INTEGER, username TEXT, password TEXT, dob INTEGER)")
+#create a stories table
+c.execute("CREATE TABLE stories (storyid INTEGER, authorid INTEGER, timestamp INTEGER, content TEXT, last_update TEXT, contributors TEXT, tags TEXT)")
+#commit changes to he database
+db.commit()
+#close the database
+db.close()
+
 #create a Flask app
 app = Flask(__name__)
 
@@ -34,12 +50,16 @@ def creationSuccess():
     pw = request.form['pass']
     #confirm password
     pwc = request.form['passconfirm']
+    #get birthday
+    bday = request.form['bday']
     #if password and confirmed password are not the same
     if pw != pwc:
-        return "<h1>Passwords did not match!</h1><a href='/create'>Try again</a>"
+        return "<h1>Passwords did not match!</h1><a href='/register'>Try again</a>"
     #if the username already exists
     if usr in parseCSV("accounts.csv"):
-        return "<h1>Username already exists! use</h1><a href='/create'>Try again</a>"
+        return "<h1>Username already exists! use</h1><a href='/register'>Try again</a>"
+    #if the birthday indicates that the user is not old enough to create an account
+    ###JAMES WILL PUT THE STATEMENT HERE###
     #otherwise, add the new user
     accounts = open("accounts.csv", "a")
     accounts.write(usr + ',' + hashlib.sha1(pw).hexdigest() + '\n')
@@ -97,5 +117,5 @@ def results():
 if __name__=="__main__":
     app.debug = True
     #put the secret key in!!
-    app.secret_key = 123
+    app.secret_key = "123"
     app.run()
