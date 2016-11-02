@@ -1,6 +1,6 @@
 #all the necessary imports
 from flask import Flask, render_template, request, redirect, url_for, session
-import random, hashlib
+import hashlib
 import sqlite3
 
 import os
@@ -9,106 +9,82 @@ import os
 app = Flask(__name__)
 
 #login route
-@app.route("/", methods=['POST', 'GET'])
-def login():
-    #click if the user has a preexisting session
-    if "user" in session:
-        #if there was a session but you've logged out, remove the user from teh session
-        if "logout" in request.form:
-            session.pop("user")
-        #if there wasn't already a session go to the /results app route
-        else:
-            return redirect("/results")
-    #return the login page
-    return render_template("login.html")
+@app.route("/")
+def index():
+    # Display a bunch of stories and link to register/login
+    return render_template("index.html")
 
 #create a new account app route
-@app.route("/register")
-def newAccount():
-    #go to the register html page
-    return render_template("register.html")
+@app.route("/register", methods=["POST", "GET"])
+def register():
+    if request.method == "POST":
+        # User has submitted a request to register an account
+        usr = request.form["username"]
+        pw = request.form["pass"]
+        pwc = request.form["passconfirm"]
+        bday = request.form["bday"]
 
-#create a "you've successfully registered for an account" app route
-@app.route("/success", methods=['POST'])
-def creationSuccess():
-    #get username
-    usr = request.form['username']
-    #get password
-    pw = request.form['pass']
-    #confirm password
-    pwc = request.form['passconfirm']
-    #get birthday
-    bday = request.form['bday']
-    #if password and confirmed password are not the same
-    if pw != pwc:
-        return "<h1>Passwords did not match!</h1><a href='/register'>Try again</a>"
-    #if the username already exists
-    d = sqlite3.connect("data.db")
-    c = d.cursor()
-    c.execute("SELECT username from users where username = '" + usr +"'")
-    if c.fetchone():
-        return "<h1>Username already exists! use</h1><a href='/register'>Try again</a>"
-    #if the birthday indicates that the user is not old enough to create an account
-    ###JAMES WILL PUT THE STATEMENT HERE###
-    #otherwise, add the new user
-    #####START HERE#########c.execute(INSERT INTO users values ("id ADD ALL THE VALUES FOR THE NEW USER
-    accounts = open("accounts.csv", "a")
-    accounts.write(usr + ',' + hashlib.sha1(pw).hexdigest() + '\n')
-    return "<h4>Your account has been successfully created</h4>" + render_template("login.html")
+        if pw != pwc:
+            return render_template("register.html", message="Passwords do not match.")
 
-#we need to be able to break apart the elements of the csv file to check the usernames and passwords
-def parseCSV(location):
-    #string of the accounts csv file
-    slogin = open("accounts.csv", "r")
-    slogin = slogin.read()
-    #keep the usernames paired with their respective passwords
-    pairs = slogin.split("\n")
-    logins = {}
-    print "\n"
-    #for each pair of usernames and passwords if the length of the pair is greater than 1 (you have a username, a comma, and a password) separate at the comma
-    for pair in pairs:
-        if len(pair)>1:
-            logins[pair[0:pair.index(',')]] = pair[pair.index(",")+1:]
-    print "\n"
-    #return the dict of logins
-    return logins
+        d = sqlite3.connect("data.db")
+        c = d.cursor()
+        c.execute("SELECT username from users where username = '" + usr +"'")
+        if c.fetchone():
+            return render_template("register.html", message="That username is taken.")
 
-#create a results app route
-@app.route("/results", methods=['GET', 'POST'])
-def results():
-    #if your user has a session
-    if "user" in session:
-        #go to the home page html page, mark the success variable as true, and note which user is in session
-        return render_template("home.html", success=True, user=session["user"])
+        #####START HERE#########c.execute(INSERT INTO users values ("id ADD ALL THE VALUES FOR THE NEW USER
+        accounts = open("accounts.csv", "a")
+        accounts.write(usr + ',' + hashlib.sha1(pw).hexdigest() + '\n')
+        return render_template("register.html", message="Account successfully created!")
     else:
-        #store the dict of logins from the csv file
-        logins = parseCSV("accounts.csv")
-        #hash the inputted password
-        myHash = hashlib.sha1(request.form['pass'])
-        #save the inputted username
-        usr = request.form['username']
-        #save the inputted password
-        pw = request.form['pass']
-        #if the username exists and the hashed inputted password is the same as the hashed password linked to the username
-        if usr in logins and logins[usr] == myHash.hexdigest():
-            #save the current user in a session
-            session["user"] = usr
-            #return the home page for the user
-            return render_template("home.html", success=True, user=session["user"])
-        else:
-            #if the username is not in the csv file
-            if usr not in logins:
-                #redirect and go to the wrong user problem
-                return render_template("home.html", success=False, problem="wronguser")
-            else:
-                #redirect and go to the wrong password problem
-                return render_template("home.html", success=False, problem="wrongpassword")
+        # User is viewing the page
+        return render_template("register.html")
 
-#for debugging
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["pass"]
+        # Check to see if a user exists with that username/password combo
+        # if success:
+        #     session["username"] = username
+        #     return redirect(url_for("index"))
+        return render_template("login.html", message="Invalid credentials")
+    else:
+        return render_template("login.html")
+
+@app.route("/create", methods=["GET", "POST"])
+def create():
+    # Create new story
+    pass
+
+@app.route("/update", methods=["GET", "POST"])
+def update():
+    # Update story
+    pass
+
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    # Profile
+    pass
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+@app.context_processor
+def inject_username():
+    # inject the username into each template, so we can render the navbar correctly.
+    if session.get("username"):
+        return dict(username=session["username"])
+    return dict()
+
 if __name__=="__main__":
     app.debug = True
 
-    # Generate and store secret key
+    # Generate and store secret key if it doesn't exist
     with open(".secret_key", "a+b") as f:
         secret_key = f.read()
         if not secret_key:
