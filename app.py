@@ -1,6 +1,7 @@
 #all the necessary imports
 from flask import Flask, render_template, request, redirect, url_for, session
 import random, hashlib
+import sqlite3
 
 #create a Flask app
 app = Flask(__name__)
@@ -40,12 +41,16 @@ def creationSuccess():
     if pw != pwc:
         return "<h1>Passwords did not match!</h1><a href='/register'>Try again</a>"
     #if the username already exists
-    if usr in parseCSV("accounts.csv"):
+    d = sqlite3.connect("data.db")
+    c = d.cursor()
+    c.execute("SELECT username from users where username = '" + usr +"'")
+    if c.fetchone()
         return "<h1>Username already exists! use</h1><a href='/register'>Try again</a>"
     #if the birthday indicates that the user is not old enough to create an account
     ###JAMES WILL PUT THE STATEMENT HERE###
     #otherwise, add the new user
-    accounts = open("accounts.csv", "a")
+    #####START HERE#########c.execute(INSERT INTO users values ("id ADD ALL THE VALUES FOR THE NEW USER
+     accounts = open("accounts.csv", "a")
     accounts.write(usr + ',' + hashlib.sha1(pw).hexdigest() + '\n')
     return "<h4>Your account has been successfully created</h4>" + render_template("login.html")
 
