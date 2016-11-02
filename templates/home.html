@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-
-<html>
-
-  <head>
+{% extends "base.html" %}
+{% block head %}
     {% if success %}
     <title>SUCCESS</title>
     {% else %}
     <title>FAILURE</title>
     {% endif %}
-  </head>
+{% endblock %}
 
-  <body>
+{% block body %}
     {% if success %}
     <h1>Welcome, {{user}}! You have successfully logged into your account home page!</h1>
     {% if user %}
@@ -31,9 +28,7 @@
     <h1>I'm sorry, the password submitted was incorrect.</h1>
     {% endif %}
     <br>
-   
+
     <h2><a href="/">Would you like to try to log in again?</a></h2>
     {% endif %}
-  </body>
-  
-</html>
+{% endblock %}
