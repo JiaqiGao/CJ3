@@ -1,4 +1,4 @@
-# CJ3 Worklog 
+# CJ3 DEVLOG 
 *Fill out in class on what you accomplished the night before*
 
 ###Tues Nov 1:
