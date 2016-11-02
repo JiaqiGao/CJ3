@@ -3,13 +3,14 @@
 
 ###Tues Nov 1:
 - Jordan:
-- Chloe:
+- Chloe: created very basic login/registration page (but it uses csv files, not a database, so that is something that will have to be changed)
 - James:
     - Created basic form for updating a story.
 
 ###Wed Nov 2:
 - James:
     - Added template inheritance
+- Chloe: looked into database functionality, created a db_builder.py file, started database methods
 
 ###Thur Nov 3:
 
