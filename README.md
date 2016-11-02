@@ -1,12 +1,15 @@
-# CJ3 DEVLOG 
+# CJ3 DEVLOG
 *Fill out in class on what you accomplished the night before*
 
 ###Tues Nov 1:
 - Jordan:
 - Chloe:
 - James:
+    - Created basic form for updating a story.
 
 ###Wed Nov 2:
+- James:
+    - Added template inheritance
 
 ###Thur Nov 3:
 
@@ -16,5 +19,5 @@
 
 ####Notes
 Nov 1st:
-- I created a file on a detailed tentative schedule to follow. A prettier version can also be found on [DESIGN] (https://docs.google.com/document/d/1uwDqgV-XZSSHI1XbjVz9VHeNUHYq7YrTqNlwAMHkLxY/edit)  Whenever any of you complete something, let me know on messenger and I can help with the merging process with other files created by other members of the team 
+- I created a file on a detailed tentative schedule to follow. A prettier version can also be found on [DESIGN] (https://docs.google.com/document/d/1uwDqgV-XZSSHI1XbjVz9VHeNUHYq7YrTqNlwAMHkLxY/edit)  Whenever any of you complete something, let me know on messenger and I can help with the merging process with other files created by other members of the team
 
