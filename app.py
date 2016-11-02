@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import random, hashlib
 import sqlite3
 
+import os
+
 #create a Flask app
 app = Flask(__name__)
 
@@ -44,13 +46,13 @@ def creationSuccess():
     d = sqlite3.connect("data.db")
     c = d.cursor()
     c.execute("SELECT username from users where username = '" + usr +"'")
-    if c.fetchone()
+    if c.fetchone():
         return "<h1>Username already exists! use</h1><a href='/register'>Try again</a>"
     #if the birthday indicates that the user is not old enough to create an account
     ###JAMES WILL PUT THE STATEMENT HERE###
     #otherwise, add the new user
     #####START HERE#########c.execute(INSERT INTO users values ("id ADD ALL THE VALUES FOR THE NEW USER
-     accounts = open("accounts.csv", "a")
+    accounts = open("accounts.csv", "a")
     accounts.write(usr + ',' + hashlib.sha1(pw).hexdigest() + '\n')
     return "<h4>Your account has been successfully created</h4>" + render_template("login.html")
 
@@ -105,6 +107,15 @@ def results():
 #for debugging
 if __name__=="__main__":
     app.debug = True
-    #put the secret key in!!
-    app.secret_key = "123"
+
+    # Generate and store secret key
+    with open(".secret_key", "a+b") as f:
+        secret_key = f.read()
+        if not secret_key:
+            secret_key = os.urandom(64)
+            f.write(secret_key)
+            f.flush()
+        app.secret_key = secret_key
+        f.close()
+
     app.run()
