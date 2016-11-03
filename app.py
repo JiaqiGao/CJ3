@@ -5,9 +5,6 @@ import sqlite3
 
 import os
 
-#create an id variable to be able to give each user a new id number
-int id_num = 0
-
 #create a Flask app
 app = Flask(__name__)
 
@@ -30,13 +27,18 @@ def register():
         if pw != pwc:
             return render_template("register.html", message="Passwords do not match.")
 
-        d = sqlite3.connect("data.db")
-        c = d.cursor()
+        db = sqlite3.connect("data.db")
+        c = db.cursor()
         c.execute("SELECT username from users where username = '" + usr +"'")
         if c.fetchone():
             return render_template("register.html", message="That username is taken.")
-        c.execute("INSERT INTO users values (id '" + id_num + "'username '" + usr + "'password '" + hashlib.sha1(pw).hexdigest() + "'dob '" + bday + "'")
-        id_num += 1
+
+        hashed_pw = hashlib.sha1(pw).hexdigest()
+        # Notes to everyone:
+        # Using sqlite3's parameter substitution protects us from sql injections
+        # sqlite will auto increment the id
+        c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?)", (usr, hashed_pw, bday))
+        db.commit()
         return render_template("register.html", message="Account successfully created!")
     else:
         # User is viewing the page
