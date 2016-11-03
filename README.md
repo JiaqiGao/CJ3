@@ -14,9 +14,6 @@
 ###Wed Nov 2:
 - James:
     - Added template inheritance
-    - Refactored app.py to make it more readable
-    - Added proof-of-concept code for rendering stories
-    - Stylized forms
 - Jordan:
     - Began development of stories tables in database and associated methods
 - Chloe:
@@ -26,11 +23,13 @@
 
 ###Thur Nov 3:
 - James:
-    - adgasf
+    - Refactored app.py to make it more readable
+    - Added proof-of-concept code for rendering stories
+    - Stylized forms
 - Jordan:
-    - ghujk
+    - Write python code for creating story + contributing, but doesn't connect to an html yet (will need to make create.html) 
 - Chloe:
-    - added database functionality, tested coade, commented code excessively (will have to clean that up a little bit 
+    - Added database functionality, tested code, commented code excessively (will have to clean that up a little bit 
    
 
 ###Fri Nov 4:
