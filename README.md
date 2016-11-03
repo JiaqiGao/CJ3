@@ -10,6 +10,9 @@
 ###Wed Nov 2:
 - James:
     - Added template inheritance
+    - Refactored app.py to make it more readable
+    - Added proof-of-concept code for rendering stories
+    - Stylized forms
 - Chloe: looked into database functionality, created a db_builder.py file, started database methods
 - Jordan: Began development of stories tables in database and associated methods
 
