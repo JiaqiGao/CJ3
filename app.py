@@ -1,10 +1,6 @@
 #all the necessary imports
 from flask import Flask, render_template, request, redirect, url_for, session
-import hashlib
-import sqlite3
-import datetime
-
-import os
+import hashlib, sqlite3, datetime, os
 
 #create a Flask app
 app = Flask(__name__)
@@ -31,7 +27,7 @@ def register():
 	if len(pw) < 6: 
             return render_template("register.html", message="Password must be at least 6 characters in length")
 
-	if pw = pw.islower(): 
+	if pw == pw.islower(): 
             return render_template("register.html", message="Password must contain at least one capitalized letter")
 
         #JAMES BUIRDAY STATEMENT HERE#
@@ -64,12 +60,16 @@ def login():
         db = sqlite3.connect("data.db")
         c = db.cursor()
         c.execute("SELECT password from users where username=?", (username,))
+        #check if username is in the table                                             
         if c.fetchone():
             match = c.fetchall()
-            if match[0][0] == hashed_pw:
-                session["username"] = username
-                return redirect(url_for("index"))
-        return render_template("login.html", message="Invalid credentials")
+            if match:
+                if match[0][0] == hashed_pw:
+                    session["username"] = username
+                    return redirect(url_for("index"))
+            return render_template("login.html", message = "Invalid password")
+        return render_template("login.html", message="Username does not exist..\
+.", add_mess="Create a new account?")
     else:
         return render_template("login.html")
 
