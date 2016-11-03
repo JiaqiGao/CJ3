@@ -2,7 +2,7 @@
 *Fill out in class on what you accomplished the night before*
 
 ###Tues Nov 1:
-- Jordan:
+- Jordan: created basic form for creating a story
 - Chloe: created very basic login/registration page (but it uses csv files, not a database, so that is something that will have to be changed)
 - James:
     - Created basic form for updating a story.
@@ -11,6 +11,7 @@
 - James:
     - Added template inheritance
 - Chloe: looked into database functionality, created a db_builder.py file, started database methods
+- Jordan: Began development of stories tables in database and associated methods
 
 ###Thur Nov 3:
 
