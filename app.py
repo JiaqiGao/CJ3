@@ -8,8 +8,9 @@ app = Flask(__name__)
 #login route
 @app.route("/")
 def index():
-    # Display a bunch of stories and link to register/login
-    return render_template("index.html")
+    if 'username' in session:
+        return render_template("index.html", user=session["username"])
+    return render_template("login.html")
 
 #create a new account app route
 @app.route("/register", methods=["POST", "GET"])
@@ -60,13 +61,11 @@ def login():
         db = sqlite3.connect("data.db")
         c = db.cursor()
         c.execute("SELECT password from users where username=?", (username,))
-        #check if username is in the table                                             
-        if c.fetchone():
-            match = c.fetchall()
-            if match:
-                if match[0][0] == hashed_pw:
-                    session["username"] = username
-                    return redirect(url_for("index"))
+        match = c.fetchall()
+        if match:
+            if match[0][0] == hashed_pw:
+                session["username"] = username
+                return redirect(url_for("index"))
             return render_template("login.html", message = "Invalid password")
         return render_template("login.html", message="Username does not exist..\
 .", add_mess="Create a new account?")
