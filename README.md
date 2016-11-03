@@ -30,7 +30,7 @@
 - Jordan:
     - ghujk
 - Chloe:
-    - oplj
+    - added database functionality, tested coade, commented code excessively (will have to clean that up a little bit 
    
 
 ###Fri Nov 4:
