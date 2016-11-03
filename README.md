@@ -1,7 +1,7 @@
 # CJ3 DEVLOG
-*Fill out in class on what you accomplished the night before*
+*Fill out in class on what you accomplished the day before*
 
-###Tues Nov 1:
+###Mon Nov 1:
 - James:
     - Created basic form for updating a story.
 - Jordan:
@@ -11,7 +11,7 @@
 - Jiaqi:
     - Created a detailed plan to outline work that needs to be done by each day
 
-###Wed Nov 2:
+###Tues Nov 2:
 - James:
     - Added template inheritance
 - Jordan:
@@ -21,7 +21,7 @@
 - Jiaqi:
     - Tested code and added login verification
 
-###Thur Nov 3:
+###Wed Nov 3:
 - James:
     - Refactored app.py to make it more readable
     - Added proof-of-concept code for rendering stories
@@ -31,8 +31,13 @@
 - Chloe:
     - Added database functionality, tested code, commented code excessively (will have to clean that up a little bit 
    
+###Thur Nov 4:
+- James:
+- Jordan:
+- Chloe:
 
 ###Fri Nov 4:
+
 
 ..
 
