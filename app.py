@@ -49,10 +49,15 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["pass"]
+        hashed_pw = hashlib.sha1(password).hexdigest()
         # Check to see if a user exists with that username/password combo
-        # if success:
-        #     session["username"] = username
-        #     return redirect(url_for("index"))
+        db = sqlite3.connect("data.db")
+        c = db.cursor()
+        c.execute("SELECT password from users where username = '" + username +"'")
+        match = c.fetchall()
+        if match[0][0] == hashed_pw:
+             session["username"] = username
+             return redirect(url_for("index"))
         return render_template("login.html", message="Invalid credentials")
     else:
         return render_template("login.html")
