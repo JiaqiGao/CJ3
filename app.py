@@ -68,22 +68,25 @@ def login():
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
-    d = sqlite3.connect("data.db")
-    c = d.cursor()
+    if request.method == "POST":
+        d = sqlite3.connect("data.db")
+        c = d.cursor()
 
-    #updating each table input
-    username = session["username"]
+        #updating each table input
+        username = session["username"]
 
-    now = datetime.datetime.now()
-    timestamp = now.strftime("%Y-%m-%d %H:%M")
+        now = datetime.datetime.now()
+        timestamp = now.strftime("%Y-%m-%d %H:%M")
 
-    content = request.form['content']
-    last_update = ''
-    contributors = ''
-    tags = request.form['tags']
+        content = request.form['content']
+        last_update = ''
+        contributors = ''
+        tags = request.form['tags']
 
-    q = "INSERT INTO stories VALUES(NULL, ?, ?, ?, ?, ?, ?)"
-    # c.execute(q, (username, timestamp, content, last_update, contributors, tags))
+        q = "INSERT INTO stories VALUES(NULL, ?, ?, ?, ?, ?, ?)"
+        # c.execute(q, (username, timestamp, content, last_update, contributors, tags))
+    else:
+        return render_template("create.html")
 
 @app.route("/contribute", methods=["GET", "POST"])
 def contribute():

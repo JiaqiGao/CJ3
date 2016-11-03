@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block head %}
+<title>Create</title>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <p>{{ message }}</p>
+
+    <h1>Create a story</h1>
+    <form action="/create" method="POST">
+        <div class="row">
+            <div class="col-md-6">
+                <p>Title: <input type="text" class="form-control" name="title"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>Contents: <textarea class="form-control" name="contents"></textarea></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-primary">
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
