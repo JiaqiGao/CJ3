@@ -59,10 +59,16 @@ def create():
     # Create new story
     pass
 
-@app.route("/update", methods=["GET", "POST"])
-def update():
-    # Update story
-    pass
+@app.route("/contribute", methods=["GET", "POST"])
+def contribute():
+    if request.method == "POST":
+        # Add contribution to the database
+        story_id = request.form["story_id"]
+        return render_template("contribute.html")
+    else:
+        # View all stories
+        stories = []
+        return render_template("contribute.html", stories=stories)
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
