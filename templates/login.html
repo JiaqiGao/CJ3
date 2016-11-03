@@ -1,18 +1,26 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title>Login</title>
+<title>Login</title>
 {% endblock %}
 
 {% block body %}
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
+<div class="container">
+    <p>{{ message }}</p>
 
     <h1>Log in here</h1>
     <form method="POST" action="/login">
-      <p>Username: <input type="text" name="username"></p>
-      <p>Password: <input type="password" name="pass"></p>
-      <input type="submit" name="go">
+        <div class="row">
+            <div class="col-md-6">
+                <p>Username: <input class="form-control" type="text" name="username" required></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>Password: <input class="form-control" type="password" name="pass" required></p>
+            </div>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Login">
     </form>
+</div>
 {% endblock %}
