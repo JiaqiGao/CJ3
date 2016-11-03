@@ -9,9 +9,9 @@
     {{ messages }}
     {% for story in stories %}
     <div class="panel panel-default">
-        <div class="panel-heading">story["title"]</div>
+        <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
-            <p>story["contents"]</p>
+            <p>{{ story["contents"] }}</p>
             <form id="{{ story['story_id'] }}" class="horizontal-form" action="/update" method="post">
                 <div class="row">
                     <div class="col-md-6">

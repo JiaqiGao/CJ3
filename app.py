@@ -13,9 +13,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     # Display a bunch of stories and link to register/login
-    if 'username' in session:
-        return render_template("index.html", user=session["username"])
-    return render_template("login.html")
+    return render_template("index.html")
 
 #create a new account app route
 @app.route("/register", methods=["POST", "GET"])
@@ -71,6 +69,9 @@ def login():
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
+    if "username" not in session:
+        return redirect(url_for("login"))
+
     if request.method == "POST":
         d = sqlite3.connect("data.db")
         c = d.cursor()
@@ -93,6 +94,9 @@ def create():
 
 @app.route("/contribute", methods=["GET", "POST"])
 def contribute():
+    if "username" not in session:
+        return redirect(url_for("login"))
+
     if request.method == "POST":
         # Add contribution to the database
         story_id = request.form["story_id"]
