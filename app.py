@@ -25,15 +25,21 @@ def register():
         if pw != pwc:
             return render_template("register.html", message="Passwords do not match.")
 
-	if len(pw) < 6: 
+        if len(pw) < 6:
             return render_template("register.html", message="Password must be at least 6 characters in length")
 
-	if pw == pw.islower(): 
+        if pw == pw.lower():
             return render_template("register.html", message="Password must contain at least one capitalized letter")
 
-        #JAMES BUIRDAY STATEMENT HERE#
-        #   return render_template("register.html", message="Users must be 13 years or older to register for an account.")
-        
+        now = datetime.datetime.now()
+        bday = bday.split("-")
+        if len(bday) != 3:
+            return render_template("register.html", message="Invalid birthday.")
+
+        dob = datetime.datetime(int(bday[0]), int(bday[1]), int(bday[2]))
+        if int((now - dob).days / 365.25) < 13:
+            return render_template("register.html", message="Users must be 13 years or older to register for an account.")
+
         db = sqlite3.connect("data.db")
         c = db.cursor()
         c.execute("SELECT username from users where username=?", (usr,))
