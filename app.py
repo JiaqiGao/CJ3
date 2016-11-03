@@ -30,6 +30,9 @@ def register():
         if pw != pwc:
             return render_template("register.html", message="Passwords do not match.")
 
+        #JAMES BUIRDAY STATEMENT HERE#
+        #   return render_template("register.html", message="Users must be 13 years or older to register for an account.")
+        
         db = sqlite3.connect("data.db")
         c = db.cursor()
         c.execute("SELECT username from users where username=?", (usr,))
