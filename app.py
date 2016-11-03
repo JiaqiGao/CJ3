@@ -5,6 +5,9 @@ import sqlite3
 
 import os
 
+#create an id variable to be able to give each user a new id number
+int id_num = 0
+
 #create a Flask app
 app = Flask(__name__)
 
@@ -32,10 +35,8 @@ def register():
         c.execute("SELECT username from users where username = '" + usr +"'")
         if c.fetchone():
             return render_template("register.html", message="That username is taken.")
-
-        #####START HERE#########c.execute(INSERT INTO users values ("id ADD ALL THE VALUES FOR THE NEW USER
-        accounts = open("accounts.csv", "a")
-        accounts.write(usr + ',' + hashlib.sha1(pw).hexdigest() + '\n')
+        c.execute("INSERT INTO users values (id '" + id_num + "'username '" + usr + "'password '" + hashlib.sha1(pw).hexdigest() + "'dob '" + bday + "'")
+        id_num += 1
         return render_template("register.html", message="Account successfully created!")
     else:
         # User is viewing the page
