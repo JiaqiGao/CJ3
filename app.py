@@ -13,7 +13,9 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     # Display a bunch of stories and link to register/login
-    return render_template("index.html")
+    if 'username' in session:
+        return render_template("index.html", user=session["username"])
+    return render_template("login.html")
 
 #create a new account app route
 @app.route("/register", methods=["POST", "GET"])
@@ -30,7 +32,7 @@ def register():
 
         db = sqlite3.connect("data.db")
         c = db.cursor()
-        c.execute("SELECT username from users where username=?", (usr,))
+        c.execute("SELECT username from users where username=?", (usr))
         if c.fetchone():
             return render_template("register.html", message="That username is taken.")
 
@@ -38,7 +40,7 @@ def register():
         # Notes to everyone:
         # Using sqlite3's parameter substitution protects us from sql injections
         # sqlite will auto increment the id
-        c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?)", (usr, hashed_pw, bday,))
+        c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?)", (usr, hashed_pw, bday))
         db.commit()
         return render_template("register.html", message="Account successfully created!")
     else:
@@ -54,11 +56,12 @@ def login():
         # Check to see if a user exists with that username/password combo
         db = sqlite3.connect("data.db")
         c = db.cursor()
-        c.execute("SELECT password from users where username=?", (username,))
-        match = c.fetchall()
-        if match[0][0] == hashed_pw:
-             session["username"] = username
-             return redirect(url_for("index"))
+        c.execute("SELECT password from users where username=?", (username))
+        if c.fetchone():
+            match = c.fetchall()
+            if match[0][0] == hashed_pw:
+                session["username"] = username
+                return redirect(url_for("index"))
         return render_template("login.html", message="Invalid credentials")
     else:
         return render_template("login.html")
@@ -92,7 +95,7 @@ def contribute():
         c = d.cursor()
 
         # find row containing our story
-        c.execute("SELECT * from stories WHERE storyid=?", (story_id,))
+        c.execute("SELECT * from stories WHERE storyid=?", (story_id))
 
         #set variables to new values
         results = c.fetchall()[0]
@@ -103,7 +106,7 @@ def contribute():
 
         # update the values in the database
         q = "UPDATE stories SET content=?, last_update=?, contributors=?, tags=? WHERE storyid=?"
-        # c.execute(q, (content, last_update, contributors, tags, storyid,))
+        # c.execute(q, (content, last_update, contributors, tags, storyid))
 
         return render_template("contribute.html")
     else:
