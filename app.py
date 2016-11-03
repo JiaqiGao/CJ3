@@ -97,6 +97,23 @@ def contribute():
     if request.method == "POST":
         # Add contribution to the database
         story_id = request.form["story_id"]
+        
+        d = sqlite3.connect("data.db")
+        c = d.cursor()
+        
+        # find row containing our story
+        c.execute("SELECT * from stories WHERE storyid=" + storyid)
+
+        #set variables to new values
+        results = c.fetchall()[0]
+        content = results[3] + request['contribution']
+        last_update = request['contribution']
+        contributors = results[5] + "," + session['username']
+        tags = results[6] + "," + request[tags]
+
+        # update the values in the database
+        q = 'UPDATE stories SET content = "{}", last_update = "{}", contributors = "{}", tags = "{}" WHERE storyid= "{}"'.format(content, last_update, contributors, tags, storyid)
+        
         return render_template("contribute.html")
     else:
         # View all stories
