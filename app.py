@@ -91,8 +91,8 @@ def create():
         timestamp = now.strftime("%Y-%m-%d %H:%M")
 
         content = request.form['content']
-        last_update = ''
-        contributors = ''
+        last_update = request.form['content']
+        contributors = username
         tags = request.form['tags']
 
         q = "INSERT INTO stories VALUES(NULL, ?, ?, ?, ?, ?, ?)"
