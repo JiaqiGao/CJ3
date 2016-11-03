@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import hashlib
 import sqlite3
+import datetime
 
 import os
 
@@ -64,8 +65,32 @@ def login():
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
-    # Create new story
-    pass
+    d = sqlite3.connect("data.db")
+    c = d.cursor()
+    
+    c.execute("SELECT storyid from stories")
+    # Check if there are any stories yet
+    results = c.fetchone()
+    if results:
+        results = [results] + c.fetchall()
+        # set storyid to next available id
+        storyid = results[-1][0] + 1
+    else:
+        storyid = 0 #first story
+        
+    #updating each table input
+    username = session["username"]
+        
+    now = datetime.datetime.now()
+    timestamp = now.strftime("%Y-%m-%d %H:%M")
+        
+    content = request.form['content']
+    last_update = ''
+    contributors = ''
+    tags = request.form['tags']
+        
+    q = 'INSERT INTO stories VALUES("{}","{}","{}","{}","{}","{}","{}")'.format(storyid, username, timestamp, content, last_update, contributors, tags)
+
 
 @app.route("/contribute", methods=["GET", "POST"])
 def contribute():
