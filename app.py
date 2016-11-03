@@ -30,7 +30,7 @@ def register():
 
         db = sqlite3.connect("data.db")
         c = db.cursor()
-        c.execute("SELECT username from users where username = '" + usr +"'")
+        c.execute("SELECT username from users where username=?", (usr))
         if c.fetchone():
             return render_template("register.html", message="That username is taken.")
 
@@ -54,7 +54,7 @@ def login():
         # Check to see if a user exists with that username/password combo
         db = sqlite3.connect("data.db")
         c = db.cursor()
-        c.execute("SELECT password from users where username = '" + username +"'")
+        c.execute("SELECT password from users where username=?", (username))
         match = c.fetchall()
         if match[0][0] == hashed_pw:
              session["username"] = username
@@ -67,53 +67,44 @@ def login():
 def create():
     d = sqlite3.connect("data.db")
     c = d.cursor()
-    
-    c.execute("SELECT storyid from stories")
-    # Check if there are any stories yet
-    results = c.fetchone()
-    if results:
-        results = [results] + c.fetchall()
-        # set storyid to next available id
-        storyid = results[-1][0] + 1
-    else:
-        storyid = 0 #first story
-        
+
     #updating each table input
     username = session["username"]
-        
+
     now = datetime.datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M")
-        
+
     content = request.form['content']
     last_update = ''
     contributors = ''
     tags = request.form['tags']
-        
-    q = 'INSERT INTO stories VALUES("{}","{}","{}","{}","{}","{}","{}")'.format(storyid, username, timestamp, content, last_update, contributors, tags)
 
+    q = "INSERT INTO stories VALUES(NULL, ?, ?, ?, ?, ?, ?)"
+    # c.execute(q, (username, timestamp, content, last_update, contributors, tags))
 
 @app.route("/contribute", methods=["GET", "POST"])
 def contribute():
     if request.method == "POST":
         # Add contribution to the database
         story_id = request.form["story_id"]
-        
+
         d = sqlite3.connect("data.db")
         c = d.cursor()
-        
+
         # find row containing our story
-        c.execute("SELECT * from stories WHERE storyid=" + storyid)
+        c.execute("SELECT * from stories WHERE storyid=?", (story_id))
 
         #set variables to new values
         results = c.fetchall()[0]
         content = results[3] + request['contribution']
         last_update = request['contribution']
         contributors = results[5] + "," + session['username']
-        tags = results[6] + "," + request[tags]
+        tags = results[6] + "," + request['tags']
 
         # update the values in the database
-        q = 'UPDATE stories SET content = "{}", last_update = "{}", contributors = "{}", tags = "{}" WHERE storyid= "{}"'.format(content, last_update, contributors, tags, storyid)
-        
+        q = "UPDATE stories SET content=?, last_update=?, contributors=?, tags=? WHERE storyid=?"
+        # c.execute(q, (content, last_update, contributors, tags, storyid))
+
         return render_template("contribute.html")
     else:
         # View all stories
