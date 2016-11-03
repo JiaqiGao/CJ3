@@ -28,6 +28,12 @@ def register():
         if pw != pwc:
             return render_template("register.html", message="Passwords do not match.")
 
+	if len(pw) < 6: 
+            return render_template("register.html", message="Password must be at least 6 characters in length")
+
+	if pw = pw.islower(): 
+            return render_template("register.html", message="Password must contain at least one capitalized letter")
+
         #JAMES BUIRDAY STATEMENT HERE#
         #   return render_template("register.html", message="Users must be 13 years or older to register for an account.")
         
