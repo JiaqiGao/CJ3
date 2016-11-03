@@ -13,7 +13,7 @@ c = db.cursor()
 c.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, dob INTEGER)")
 
 #create a stories table
-c.execute("CREATE TABLE stories (storyid INTEGER PRIMARY KEY, username TEXT, timestamp INTEGER, content TEXT, last_update TEXT, contributors TEXT, tags TEXT)")
+c.execute("CREATE TABLE stories (storyid INTEGER PRIMARY KEY, username TEXT, timestamp INTEGER, title TEXT, content TEXT, last_update TEXT, contributors TEXT, tags TEXT)")
 
 #commit changes to he database
 db.commit()
