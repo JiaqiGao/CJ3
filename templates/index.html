@@ -6,7 +6,6 @@
 
 {% block body %}
 <div class="container">
-    <!-- Render stories -->
     {% if username %}
     <h3>Stories you've contributed to:</h3>
     {% for story in stories %}
@@ -14,7 +13,7 @@
         <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
             Last updated by {{ story["author"] }} at {{ story["timestamp"] }}.<br>
-            {{ story["contents"] }}<br>
+            {{ story["content"] }}<br>
         </div>
     </div>
     {% endfor %}
