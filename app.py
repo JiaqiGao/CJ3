@@ -32,11 +32,11 @@ def register():
             return render_template("register.html", message="Password must contain at least one capitalized letter")
 
         now = datetime.datetime.now()
-        bday = bday.split("-")
-        if len(bday) != 3:
+        dob = bday.split("-")
+        if len(dob) != 3:
             return render_template("register.html", message="Invalid birthday.")
 
-        dob = datetime.datetime(int(bday[0]), int(bday[1]), int(bday[2]))
+        dob = datetime.datetime(int(dob[0]), int(dob[1]), int(dob[2]))
         if int((now - dob).days / 365.25) < 13:
             return render_template("register.html", message="Users must be 13 years or older to register for an account.")
 
@@ -47,9 +47,6 @@ def register():
             return render_template("register.html", message="That username is taken.")
 
         hashed_pw = hashlib.sha1(pw).hexdigest()
-        # Notes to everyone:
-        # Using sqlite3's parameter substitution protects us from sql injections
-        # sqlite will auto increment the id
         c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?)", (usr, hashed_pw, bday,))
         db.commit()
         return render_template("register.html", message="Account successfully created!")
