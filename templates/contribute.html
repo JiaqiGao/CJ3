@@ -11,12 +11,13 @@
     <div class="panel panel-default">
         <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
-            <p>{{ story["content"] }}</p>
-            <form id="{{ story['story_id'] }}" class="horizontal-form" action="/update" method="post">
+            <p>{{ story["last_update"] }}</p>
+            <form  class="horizontal-form" action="/contribute" method="post">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <textarea class="form-control" id="content"></textarea>
+                            <textarea class="form-control" name="content"></textarea>
+                            <input type="hidden" name="story_id" value="{{ story['story_id'] }}">
                             <button type="submit" class="btn btn-primary">Update</button>
                         </div>
                     </div>

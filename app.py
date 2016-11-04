@@ -1,6 +1,9 @@
 #all the necessary imports
 from flask import Flask, render_template, request, redirect, url_for, session
-import hashlib, sqlite3, datetime, os
+import datetime, os
+
+import story
+import user
 
 #create a Flask app
 app = Flask(__name__)
@@ -40,15 +43,11 @@ def register():
         if int((now - dob).days / 365.25) < 13:
             return render_template("register.html", message="Users must be 13 years or older to register for an account.")
 
-        db = sqlite3.connect("data.db")
-        c = db.cursor()
-        c.execute("SELECT username from users where username=?", (usr,))
-        if c.fetchone():
-            return render_template("register.html", message="That username is taken.")
+        if user.username_exists(usr):
+            return render_template("register.html", message="Username is already in use.")
 
-        hashed_pw = hashlib.sha1(pw).hexdigest()
-        c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?)", (usr, hashed_pw, bday,))
-        db.commit()
+        user.add_user(usr, pw, bday)
+
         return render_template("register.html", message="Account successfully created!")
     else:
         # User is viewing the page
@@ -59,19 +58,12 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["pass"]
-        hashed_pw = hashlib.sha1(password).hexdigest()
-        # Check to see if a user exists with that username/password combo
-        db = sqlite3.connect("data.db")
-        c = db.cursor()
-        c.execute("SELECT password from users where username=?", (username,))
-        match = c.fetchall()
-        if match:
-            if match[0][0] == hashed_pw:
-                session["username"] = username
-                return redirect(url_for("index"))
-            return render_template("login.html", message = "Invalid password")
-        return render_template("login.html", message="Username does not exist..\
-.", add_mess="Create a new account?")
+
+        success = user.authenticate(username, password)
+        if success:
+            session["username"] = username
+            return redirect(url_for("index"))
+        return render_template("login.html", message = "Invalid credentials.")
     else:
         return render_template("login.html")
 
@@ -81,22 +73,14 @@ def create():
         return redirect(url_for("login"))
 
     if request.method == "POST":
-        d = sqlite3.connect("data.db")
-        c = d.cursor()
-
-        #updating each table input
         username = session["username"]
+        title = request.form["title"]
+        content = request.form["content"]
+        tags = request.form["tags"]
 
-        now = datetime.datetime.now()
-        timestamp = now.strftime("%Y-%m-%d %H:%M")
+        story.create_story(username, title, content, tags)
 
-        content = request.form['content']
-        last_update = request.form['content']
-        contributors = username
-        tags = request.form['tags']
-
-        q = "INSERT INTO stories VALUES(NULL, ?, ?, ?, ?, ?, ?)"
-        # c.execute(q, (username, timestamp, content, last_update, contributors, tags,))
+        return render_template("create.html", message="Story created!")
     else:
         return render_template("create.html")
 
@@ -108,29 +92,24 @@ def contribute():
     if request.method == "POST":
         # Add contribution to the database
         story_id = request.form["story_id"]
+        content = request.form["content"]
 
-        d = sqlite3.connect("data.db")
-        c = d.cursor()
+        story.update_story(session["username"], story_id, content)
 
-        # find row containing our story
-        c.execute("SELECT * from stories WHERE storyid=?", (story_id,))
-
-        #set variables to new values
-        results = c.fetchall()[0]
-        content = results[3] + request['contribution']
-        last_update = request['contribution']
-        contributors = results[5] + "," + session['username']
-        tags = results[6] + "," + request['tags']
-
-        # update the values in the database
-        q = "UPDATE stories SET content=?, last_update=?, contributors=?, tags=? WHERE storyid=?"
-        # c.execute(q, (content, last_update, contributors, tags, storyid,))
-
-        return render_template("contribute.html")
+        return redirect(url_for("contribute"))
     else:
         # View all stories
-        stories = []
-        return render_template("contribute.html", stories=stories)
+        stories = story.get_stories()
+        filtered = []
+        for s in stories:
+            filtered.append({
+                "story_id": s[0],
+                "timestamp": datetime.datetime.fromtimestamp(s[2]).strftime("%B %d, %Y %I:%M %p"),
+                "title": s[3],
+                "last_update": s[5]
+            })
+
+        return render_template("contribute.html", stories=filtered)
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
