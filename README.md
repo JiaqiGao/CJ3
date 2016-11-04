@@ -27,12 +27,13 @@
     - Added proof-of-concept code for rendering stories
     - Stylized forms
 - Jordan:
-    - Write python code for creating story + contributing, but doesn't connect to an html yet (will need to make create.html) 
+    - Write python code for creating story + contributing, but doesn't connect to an html yet (will need to make create.html)
 - Chloe:
-    - Added database functionality, tested code, commented code excessively (will have to clean that up a little bit 
-   
+    - Added database functionality, tested code, commented code excessively (will have to clean that up a little bit
+
 ###Thur Nov 4:
 - James:
+    - Exported database code to external modules
 - Jordan:
 - Chloe:
 
