@@ -13,7 +13,9 @@ c = db.cursor()
 c.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, dob INTEGER)")
 
 #create a stories table
-c.execute("CREATE TABLE IF NOT EXISTS stories (storyid INTEGER PRIMARY KEY, username TEXT, timestamp INTEGER, title TEXT, content TEXT, last_update TEXT, contributors TEXT, tags TEXT)")
+c.execute("CREATE TABLE IF NOT EXISTS stories (storyid INTEGER PRIMARY KEY, title TEXT, tags TEXT)")
+
+c.execute("CREATE TABLE IF NOT EXISTS updates (id INTEGER PRIMARY KEY, storyid INTEGER, userid INTEGER, timestamp INTEGER, content TEXT)")
 
 print "table created"
 

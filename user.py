@@ -45,3 +45,15 @@ def get_id(username):
     result = c.fetchone()
     db.close()
     return result[0] if result else None
+
+# Get all stories the user contributed to
+def get_stories(uid):
+    db = sqlite3.connect(DATABASE)
+    c = db.cursor()
+
+    query = "SELECT DISTINCT storyid from updates WHERE userid = ?"
+    c.execute(query, (uid,))
+
+    result = c.fetchall()
+    db.close()
+    return [x[0] for x in result] if result else []

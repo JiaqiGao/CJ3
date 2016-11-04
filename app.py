@@ -94,16 +94,21 @@ def contribute():
     stories = story.get_stories()
     filtered = []
     for s in stories:
+        updates = story.get_updates(s[0])
+
+        last_updated = datetime.datetime.fromtimestamp(updates[-1][3]).strftime("%B %d, %Y %I:%M %p")
+        last_update = updates[-1][4]
+
         filtered.append({
             "story_id": s[0],
-            "timestamp": datetime.datetime.fromtimestamp(s[2]).strftime("%B %d, %Y %I:%M %p"),
-            "title": s[3],
-            "last_update": s[5]
+            "timestamp": last_updated,
+            "title": s[1],
+            "last_update": last_update
         })
 
     if request.method == "POST":
         # Add contribution to the database
-        story_id = request.form["story_id"]
+        story_id = int(request.form["story_id"])
         content = request.form["content"]
 
         message = story.update_story(session["username"], story_id, content)
