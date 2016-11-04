@@ -31,7 +31,7 @@ def update_story(username, story_id, content):
     c = db.cursor()
 
     for story in user.get_stories(uid):
-        if uid in story:
+        if story_id in story:
             return "You already contributed to this story."
 
     query = "INSERT INTO updates VALUES (NULL, ?, ?, ?, ?)"
