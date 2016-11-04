@@ -57,3 +57,7 @@ def get_stories(uid):
     result = c.fetchall()
     db.close()
     return result if result else []
+
+def create_profile(uid):
+    db = sqlite3.connect(DATABASE)
+    c = db.cursor()
