@@ -13,7 +13,19 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     if 'username' in session:
-        return render_template("index.html", user=session["username"])
+        uid = user.get_id(session["username"])
+        stories = user.get_stories(uid)
+        print stories
+        filtered = []
+        for s in stories:
+            updates = story.get_updates(s[0])
+            content = "".join([update[4] for update in updates])
+            filtered.append({
+                "title": s[1],
+                "content": content
+            })
+        return render_template("index.html", stories=filtered)
+
     return render_template("login.html")
 
 #create a new account app route

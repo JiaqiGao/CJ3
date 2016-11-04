@@ -8,15 +8,16 @@
 <div class="container">
     {% if username %}
     <h3>Stories you've contributed to:</h3>
+
     {% for story in stories %}
     <div class="panel panel-default">
         <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
-            Last updated on {{ story["timestamp"] }}.<br>
-            {{ story["last_update"] }}<br>
+            {{ story["content"] }}<br>
         </div>
     </div>
     {% endfor %}
+
     {% endif %}
 </div>
 {% endblock %}

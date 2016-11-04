@@ -30,8 +30,9 @@ def update_story(username, story_id, content):
     db = sqlite3.connect(DATABASE)
     c = db.cursor()
 
-    if story_id in user.get_stories(uid):
-        return "You already contributed to this story."
+    for story in user.get_stories(uid):
+        if uid in story:
+            return "You already contributed to this story."
 
     query = "INSERT INTO updates VALUES (NULL, ?, ?, ?, ?)"
     now = int(datetime.datetime.now().strftime("%s"))
@@ -64,4 +65,4 @@ def get_updates(story_id):
     result = c.fetchall()
     db.close()
 
-    return result
+    return result if result else []

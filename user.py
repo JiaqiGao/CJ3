@@ -51,9 +51,9 @@ def get_stories(uid):
     db = sqlite3.connect(DATABASE)
     c = db.cursor()
 
-    query = "SELECT DISTINCT storyid from updates WHERE userid = ?"
+    query = "SELECT DISTINCT stories.storyid,stories.title from updates,stories WHERE userid = ? AND updates.storyid = stories.storyid"
     c.execute(query, (uid,))
 
     result = c.fetchall()
     db.close()
-    return [x[0] for x in result] if result else []
+    return result if result else []
