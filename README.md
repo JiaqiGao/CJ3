@@ -1,5 +1,5 @@
 # CJ3 DEVLOG
-*Fill out in class on what you accomplished the day before*
+*Fill out in class on what you accomplished that day*
 
 ###Mon Nov 1:
 - James:
@@ -40,11 +40,16 @@
 
 ###Fri Nov 4:
 - James:
-    - 
+    - Added "updates" table to database
+    - Added code for showing the stories a user contributed to    - 
 - Jordan:
     - worked with Chloe on creating a profile page with full name, username, birthday, story titles of stories they contributed to, story titles of stories they started, an about me section, potentially a profile picture?, etc.
 - Chloe:
     - worked with Jordan on creating a profile page with full name, username, birthday, story titles of stories they contributed to, story titles of stories they started, an about me section, potentially a profile picture?, etc.
+    - Changed db_builder to create database only if it exists
+    - Edited database values for create methods
+- Chloe: 
+    - Added security measures for passwords, cleaned up code comments
 
 ..
 

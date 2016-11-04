@@ -13,9 +13,9 @@
             </div>
             <div id="main-navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+		{% if username %}
                     <li><a href="/create">Create a story</a></li>
                     <li><a href="/contribute">Add to an existing story</a></li>
-                {% if username %}
                     <li><a href="/profile">Profile</a></li>
                     <li><a href="/logout">Logout</a></li>
                 {% else %}
