@@ -35,7 +35,7 @@
 - James:
     - Exported database code to external modules
 - Jordan:
-- Chloe:
+- Chloe: added security measures for passwords, cleaned up code comments
 
 ###Fri Nov 4:
 
