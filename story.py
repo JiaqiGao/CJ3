@@ -19,20 +19,22 @@ def create_story(username, title, content, tags):
     db.close()
 
 def update_story(username, story_id, new_text):
-    uid = user.get_id(username)[0]
+    uid = user.get_id(username)
 
     db = sqlite3.connect(DATABASE)
     c = db.cursor()
 
     story = get_story(story_id)
-    content = story[4] + new_text
-    contributors = story[6] + "," + str(uid)
+    if str(uid) in story[6].split(","):
+        return "You already contributed to this story."
 
-    query = "UPDATE stories SET content = ?, last_update = ?, contributors = ? WHERE storyid = ?"
+    query = "UPDATE stories SET content = content + ?, last_update = ?, contributors = contributors || ? WHERE storyid = ?"
 
-    c.execute(query, (content, new_text, contributors, story_id,))
+    c.execute(query, (new_text, new_text, "," + str(uid), story_id,))
     db.commit()
     db.close()
+
+    return "Story updated."
 
 def get_story(story_id):
     db = sqlite3.connect(DATABASE)

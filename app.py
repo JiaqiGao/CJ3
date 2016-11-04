@@ -89,26 +89,26 @@ def contribute():
     if "username" not in session:
         return redirect(url_for("login"))
 
+    # View all stories
+    stories = story.get_stories()
+    filtered = []
+    for s in stories:
+        filtered.append({
+            "story_id": s[0],
+            "timestamp": datetime.datetime.fromtimestamp(s[2]).strftime("%B %d, %Y %I:%M %p"),
+            "title": s[3],
+            "last_update": s[5]
+        })
+
     if request.method == "POST":
         # Add contribution to the database
         story_id = request.form["story_id"]
         content = request.form["content"]
 
-        story.update_story(session["username"], story_id, content)
+        message = story.update_story(session["username"], story_id, content)
 
-        return redirect(url_for("contribute"))
+        return render_template("contribute.html", stories=filtered, message=message)
     else:
-        # View all stories
-        stories = story.get_stories()
-        filtered = []
-        for s in stories:
-            filtered.append({
-                "story_id": s[0],
-                "timestamp": datetime.datetime.fromtimestamp(s[2]).strftime("%B %d, %Y %I:%M %p"),
-                "title": s[3],
-                "last_update": s[5]
-            })
-
         return render_template("contribute.html", stories=filtered)
 
 @app.route("/profile", methods=["GET", "POST"])

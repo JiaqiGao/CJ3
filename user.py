@@ -44,4 +44,4 @@ def get_id(username):
 
     result = c.fetchone()
     db.close()
-    return result
+    return result[0] if result else None
