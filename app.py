@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import datetime, os
 
+import db_builder
 import story
 import user
 
