@@ -35,10 +35,16 @@
 - James:
     - Exported database code to external modules
 - Jordan:
-- Chloe: added security measures for passwords, cleaned up code comments
+- Chloe:
+    - added security measures for passwords, cleaned up code comments
 
 ###Fri Nov 4:
-
+- James:
+    - 
+- Jordan:
+    - worked with Chloe on creating a profile page with full name, username, birthday, story titles of stories they contributed to, story titles of stories they started, an about me section, potentially a profile picture?, etc.
+- Chloe:
+    - worked with Jordan on creating a profile page with full name, username, birthday, story titles of stories they contributed to, story titles of stories they started, an about me section, potentially a profile picture?, etc.
 
 ..
 
