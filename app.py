@@ -61,7 +61,7 @@ def register():
 
         user.add_user(usr, pw, bday)
 
-        return render_template("register.html", message="Account successfully created!")
+        return render_template("login.html", message="Account successfully created! You can log in now!")
     else:
         # User is viewing the page
         return render_template("register.html")
