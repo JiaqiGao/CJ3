@@ -131,6 +131,8 @@ def contribute():
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
+    if "username" not in session:
+        return redirect(url_for("login"))
     return render_template("profile.html")
 
 @app.route("/logout")
