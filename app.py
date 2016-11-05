@@ -131,8 +131,7 @@ def contribute():
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
-    # Profile
-    pass
+    return render_template("profile.html")
 
 @app.route("/logout")
 def logout():
