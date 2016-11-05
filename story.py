@@ -66,3 +66,23 @@ def get_updates(story_id):
     db.close()
 
     return result if result else []
+
+def filter_stories(stories):
+    filtered = []
+    for story in stories:
+        story_id = story[0]
+        title = story[1]
+        updates = get_updates(story_id)
+        content = "".join([update[4] for update in updates])
+        last_updated = datetime.datetime.fromtimestamp(updates[-1][3]).strftime("%B %d, %Y %I:%M %p")
+        last_update = updates[-1][4]
+
+        filtered.append({
+            "story_id": story_id,
+            "timestamp": last_updated,
+            "title": title,
+            "last_update": last_update,
+            "content": content
+        })
+
+    return filtered

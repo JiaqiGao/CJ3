@@ -15,16 +15,8 @@ def index():
     if 'username' in session:
         uid = user.get_id(session["username"])
         stories = user.get_stories(uid)
-        filtered = []
-        for s in stories:
-            updates = story.get_updates(s[0])
-            content = "".join([update[4] for update in updates])
-            filtered.append({
-                "title": s[1],
-                "content": content
-            })
+        filtered = story.filter_stories(stories)
         return render_template("index.html", stories=filtered)
-
     return render_template("login.html")
 
 #create a new account app route
@@ -61,9 +53,7 @@ def register():
         user.add_user(usr, pw, bday)
 
         return render_template("login.html", message="Account successfully created! You can log in now!")
-    else:
-        # User is viewing the page
-        return render_template("register.html")
+    return render_template("register.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -76,8 +66,7 @@ def login():
             session["username"] = username
             return redirect(url_for("index"))
         return render_template("login.html", message = "Invalid credentials.")
-    else:
-        return render_template("login.html")
+    return render_template("login.html")
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
@@ -91,32 +80,15 @@ def create():
         tags = request.form["tags"]
 
         story.create_story(username, title, content, tags)
-
         return render_template("create.html", message="Story created!")
-    else:
-        return render_template("create.html")
+    return render_template("create.html")
 
 @app.route("/contribute", methods=["GET", "POST"])
 def contribute():
     if "username" not in session:
         return redirect(url_for("login"))
 
-    # View all stories
-    stories = story.get_stories()
-    filtered = []
-    for s in stories:
-        updates = story.get_updates(s[0])
-
-        last_updated = datetime.datetime.fromtimestamp(updates[-1][3]).strftime("%B %d, %Y %I:%M %p")
-        last_update = updates[-1][4]
-
-        filtered.append({
-            "story_id": s[0],
-            "timestamp": last_updated,
-            "title": s[1],
-            "last_update": last_update
-        })
-
+    message = ""
     if request.method == "POST":
         # Add contribution to the database
         story_id = int(request.form["story_id"])
@@ -124,9 +96,9 @@ def contribute():
 
         message = story.update_story(session["username"], story_id, content)
 
-        return render_template("contribute.html", stories=filtered, message=message)
-    else:
-        return render_template("contribute.html", stories=filtered)
+    stories = story.get_stories()
+    filtered = story.filter_stories(stories)
+    return render_template("contribute.html", stories=filtered, message=message)
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
@@ -157,6 +129,5 @@ if __name__=="__main__":
             f.write(secret_key)
             f.flush()
         app.secret_key = secret_key
-        f.close()
 
     app.run()
