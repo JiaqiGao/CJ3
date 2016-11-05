@@ -15,7 +15,6 @@ def index():
     if 'username' in session:
         uid = user.get_id(session["username"])
         stories = user.get_stories(uid)
-        print stories
         filtered = []
         for s in stories:
             updates = story.get_updates(s[0])
