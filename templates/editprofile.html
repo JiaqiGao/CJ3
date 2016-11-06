@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title> {{ info['username'] }}'s Profile </title>
+{% endblock %}
+
+{% block body %}
+<form method="POST" action="/editprofile">
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading"> <input type="text" class="form-control" name="name" value={{ info['name'] }}></p> </div>
+      <div class="panel-body">
+	<p>Username: {{ info ['username'] }}</p>
+	<p>DOB : {{ info['dob'] }} </p>
+	About Me: <br>
+	<textarea class="form-control" name="aboutme" value={{ info['aboutme'] }}></textarea>
+      </div>
+    </div>
+  </div>
+  <center><input class="btn btn-primary" type="submit" value="Update"></center>
+ </form> 
+{% endblock %}

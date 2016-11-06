@@ -138,6 +138,25 @@ def profile():
     filtered = story.filter_stories(stories)
     return render_template("profile.html", info = info, stories = filtered)
 
+@app.route("/editprofile", methods = ["GET", "POST"])
+def editprofile():
+    if "username" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        # User has submitted a request to create a story
+        username = session["username"]
+
+        required_keys = ["name", "aboutme"]
+        if not validate_form(request.form, required_keys):
+            return render_template("editprofile.html", message="Malformed request.", category="danger")
+        print request.form['name']
+        user.update_profile(username, request.form['name'], request.form['aboutme'])
+        return redirect(url_for('profile'))
+    info = user.get_info(session['username'])
+    return render_template("editprofile.html", info=info)
+        
+
 @app.route("/logout")
 def logout():
     session.clear()
