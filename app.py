@@ -51,6 +51,9 @@ def register():
         password_confirm = request.form["passconfirm"]
         bday = request.form["bday"]
 
+        if not username.isalnum():
+            return render_template("register.html", message="Usernames must contain only alphanumeric characters.", category="danger")
+
         if password != password_confirm:
             return render_template("register.html", message="Passwords do not match.", category="danger")
 
