@@ -7,7 +7,7 @@
 {% block body %}
 <div class="container">
     {{ message }}
-    {% for story in stories %}
+    {%- for story in stories %}
     <div class="panel panel-default">
         <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
@@ -26,6 +26,6 @@
             </form>
         </div>
     </div>
-    {% endfor %}
+    {%- endfor %}
 </div>
 {% endblock %}

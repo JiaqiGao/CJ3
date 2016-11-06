@@ -6,20 +6,22 @@
 
 {% block body %}
 <div class="container">
-    {% if username %}
+    {%- if username %}
     <h3>Hello, {{ username }}</h3>
     <h3>Stories you've contributed to:</h3>
 
-    {% for story in stories %}
+    {%- for story in stories %}
     <div class="panel panel-default">
         <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
-            {{ story["content"] }}<br>
+            {%- for update in story["content"] %}
+            {{ update }}<br>
+            {%- endfor %}
             <p>Last updated on {{ story["timestamp"] }}</p>
         </div>
     </div>
-    {% endfor %}
+    {%- endfor %}
 
-    {% endif %}
+    {%- endif %}
 </div>
 {% endblock %}

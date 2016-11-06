@@ -74,7 +74,7 @@ def filter_stories(stories):
         story_id = story[0]
         title = story[1]
         updates = get_updates(story_id)
-        content = "".join([update[4] for update in updates])
+        content = [update[4] for update in updates]
         last_updated = datetime.datetime.fromtimestamp(updates[-1][3]).strftime("%B %d, %Y %I:%M %p")
         last_update = updates[-1][4]
 
