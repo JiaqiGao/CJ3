@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
 {% block head %}
-<title> {{ username }}'s Profile </title>
+<title> {{ info['username'] }}'s Profile </title>
 {% endblock %}
 
 {% block body %}
 <div class="container">
-    {% if username %}
-
-
-
-    {% endif %}
+  <div class="panel panel-default">
+    <div class="panel-heading">{{ info['name'] }}</div>
+    <div class="panel-body">
+      fnlfndsf
+    </div>
+  </div>
 </div>
 {% endblock %}

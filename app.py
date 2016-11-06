@@ -132,7 +132,8 @@ def contribute():
 def profile():
     if "username" not in session:
         return redirect(url_for("login"))
-    return render_template("profile.html")
+    info = user.get_info(session['username'])
+    return render_template("profile.html", info = info)
 
 @app.route("/logout")
 def logout():

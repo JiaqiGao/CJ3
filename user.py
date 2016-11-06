@@ -8,7 +8,7 @@ def add_user(username, password, bday):
     c = db.cursor()
 
     query = "INSERT INTO users VALUES (NULL, ?, ?, ?, ?, ?)"
-    c.execute(query, (username, hashlib.sha1(password).hexdigest(), bday, '', '',))
+    c.execute(query, (username, hashlib.sha1(password).hexdigest(), bday, 'Name not added', 'Not created',))
 
     db.commit()
     db.close()
@@ -43,6 +43,18 @@ def get_stories(uid):
     result = c.fetchall()
     db.close()
     return result if result else []
+
+def get_info(username):
+    results = get_user(username = username)
+    print results
+    info = {
+        'uid' : results [0],
+        'username' : results[1],
+        'dob' : results[3],
+        'name' : results[4],
+        'aboutme' : results[5]
+        }
+    return info
 
 def update_profile(uid, name, aboutme):
     db = sqlite3.connect(DATABASE)
