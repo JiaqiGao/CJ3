@@ -1,5 +1,5 @@
 # CJ3 DEVLOG
-*Fill out in class on what you accomplished that day*
+*Fill out daily on what you accomplished the previous day*
 
 ###Mon Nov 1:
 - James:
