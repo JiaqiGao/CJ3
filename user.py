@@ -44,6 +44,11 @@ def get_stories(uid):
     db.close()
     return result if result else []
 
-def create_profile(uid):
+def update_profile(uid, name, aboutme):
     db = sqlite3.connect(DATABASE)
     c = db.cursor()
+
+    query = "UPDATE users SET name = ?, aboutme = ? WHERE id = ?"
+    c.execute(query, (uid, name, aboutme,))
+
+    db.close()
