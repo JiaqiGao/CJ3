@@ -100,11 +100,14 @@ def login():
         username = request.form["username"]
         password = hashlib.sha1(request.form["pass"]).hexdigest()
 
-        result = user.get_user(username=username, password=password)
-        if result:
-            session["username"] = username
-            return redirect(url_for("profile"))
-        return render_template("login.html", message="Invalid credentials.", category="danger")
+        userexist = user.get_user(username=username)
+        if userexist:    
+            result = user.get_user(username=username, password=password)
+            if result:
+                session["username"] = username
+                return redirect(url_for("profile"))
+            return render_template("login.html", message="Invalid password", category="danger")
+        return render_template("login.html", message="Username does not exist...", add_mess="Register a new account?", category="danger")
     return render_template("login.html")
 
 @app.route("/create", methods=["GET", "POST"])
