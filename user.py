@@ -33,7 +33,6 @@ def get_user(**kwargs):
     db.close()
     return result
 
-# Get all stories the user contributed to
 def get_stories(uid):
     db = sqlite3.connect(DATABASE)
     c = db.cursor()

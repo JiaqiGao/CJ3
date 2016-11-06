@@ -53,7 +53,7 @@ def get_stories():
     result = c.fetchall()
     db.close()
 
-    return result
+    return result if result else []
 
 def get_updates(story_id):
     db = sqlite3.connect(DATABASE)
@@ -68,6 +68,7 @@ def get_updates(story_id):
     return result if result else []
 
 def filter_stories(stories):
+    """ Convert a list of stories to more usable format. Assumes all columns are present, and in order """
     filtered = []
     for story in stories:
         story_id = story[0]

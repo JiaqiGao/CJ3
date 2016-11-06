@@ -11,12 +11,14 @@ import user
 app = Flask(__name__)
 
 def validate_form(form, required_keys):
+    """ Check if a dictionary contains all the required keys """
     return set(required_keys) <= set(form)
 
 #login route
 @app.route("/")
 def index():
     if 'username' in session:
+        # Display stories that the user has contributed to
         uid = user.get_user(username=session["username"])[0]
         stories = user.get_stories(uid)
         filtered = story.filter_stories(stories)
@@ -70,6 +72,7 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        # User has submitted a request to login
         required_keys = ["username", "pass"]
         if not validate_form(request.form, required_keys):
             return render_template("login.html", message="Malformed request.")
@@ -90,6 +93,7 @@ def create():
         return redirect(url_for("login"))
 
     if request.method == "POST":
+        # User has submitted a request to create a story
         username = session["username"]
 
         required_keys = ["title", "content", "tags"]
@@ -111,6 +115,7 @@ def contribute():
 
     message = ""
     if request.method == "POST":
+        # User has submitted a request to add onto a story
         required_keys = ["story_id", "content"]
         if not validate_form(request.form, required_keys):
             return render_template("contribute.html", message="Malformed request.")
@@ -138,7 +143,7 @@ def logout():
 
 @app.context_processor
 def inject_username():
-    # inject the username into each template, so we can render the navbar correctly.
+    """ Inject the username into each template, so we can render the navbar correctly. """
     if session.get("username"):
         return dict(username=session["username"])
     return dict()
