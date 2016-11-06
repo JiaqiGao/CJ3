@@ -100,10 +100,9 @@ def login():
         username = request.form["username"]
         password = hashlib.sha1(request.form["pass"]).hexdigest()
 
-        userexist = user.get_user(username=username)
-        if userexist:    
-            result = user.get_user(username=username, password=password)
-            if result:
+        result = user.get_user(username=username)
+        if result:
+            if result[2] == password:
                 session["username"] = username
                 return redirect(url_for("profile"))
             return render_template("login.html", message="Invalid password", category="danger")
