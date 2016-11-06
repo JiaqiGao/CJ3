@@ -18,24 +18,30 @@ def index():
     if "username" not in session:
         return redirect(url_for("login"))
 
-    message = ""
-    category = ""
+    stories = story.get_stories()
+    filtered = story.filter_stories(stories)
     if request.method == "POST":
         # User has submitted a request to add onto a story
         required_keys = ["story_id", "content"]
         if not validate_form(request.form, required_keys):
-            return render_template("contribute.html", message="Malformed request.", category="danger")
+            return render_template("index.html", message="Malformed request.", category="danger", stories=filtered)
 
         # Add contribution to the database
         story_id = int(request.form["story_id"])
         content = request.form["content"]
 
+        if len(content) > 150:
+            return render_template("index.html", stories=filtered, message="Content should be less than or equal to 150 characters.", category="danger")
+
         success, message = story.update_story(session["username"], story_id, content)
         category = "success" if success else "danger"
 
-    stories = story.get_stories()
-    filtered = story.filter_stories(stories)
-    return render_template("index.html", stories=filtered, message=message, category=category)
+        stories = story.get_stories()
+        filtered = story.filter_stories(stories)
+
+        return render_template("index.html", stories=filtered, message=message, category=category)
+
+    return render_template("index.html", stories=filtered)
 
 #create a new account app route
 @app.route("/register", methods=["POST", "GET"])
@@ -116,6 +122,9 @@ def create():
         title = request.form["title"]
         content = request.form["content"]
         tags = request.form["tags"]
+
+        if len(content) > 150:
+            return render_template("create.html", message="Content should be less than or equal to 150 characters.", category="danger")
 
         story.create_story(username, title, content, tags)
         return render_template("create.html", message="Story created!", category="success")
