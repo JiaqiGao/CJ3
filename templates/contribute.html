@@ -12,6 +12,7 @@
         <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
             <p>{{ story["last_update"] }}</p>
+            <p>Last updated on {{ story["timestamp"] }}</p>
             <form  class="horizontal-form" action="/contribute" method="post">
                 <div class="row">
                     <div class="col-md-6">

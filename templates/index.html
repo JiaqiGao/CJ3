@@ -15,6 +15,7 @@
         <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
             {{ story["content"] }}<br>
+            <p>Last updated on {{ story["timestamp"] }}</p>
         </div>
     </div>
     {% endfor %}
