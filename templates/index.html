@@ -1,24 +1,29 @@
 {% extends "base.html" %}
 
-{% block head %}
-<title>Home</title>
+{% block title %}
+<title>Feed</title>
 {% endblock %}
 
 {% block body %}
-{%- if username %}
-<h3>Hello, {{ username }}</h3>
-<h3>Stories you've contributed to:</h3>
-
+<h3>Stories:</h3>
 {%- for story in stories %}
 <div class="panel panel-default">
     <div class="panel-heading">{{ story["title"] }}</div>
     <div class="panel-body">
-        {%- for update in story["content"] %}
-        {{ update }}<br>
-        {%- endfor %}
+        <p>{{ story["last_update"] }}</p>
         <p>Last updated on {{ story["timestamp"] }}</p>
+        <form  class="horizontal-form" action="/contribute" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <textarea class="form-control" name="content" required></textarea>
+                        <input type="hidden" name="story_id" value="{{ story['story_id'] }}">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 {%- endfor %}
-{%- endif %}
 {% endblock %}

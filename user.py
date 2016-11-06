@@ -45,8 +45,7 @@ def get_stories(uid):
     return result if result else []
 
 def get_info(username):
-    results = get_user(username = username)
-    print results
+    results = get_user(username=username)
     info = {
         'uid' : results [0],
         'username' : results[1],
@@ -62,7 +61,7 @@ def update_profile(username, name, aboutme):
 
     query = "UPDATE users SET name = ?, aboutme = ? WHERE username = ?"
     c.execute(query, (name, aboutme, username,))
-    
+
     db.commit()
     db.close()
 

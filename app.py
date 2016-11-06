@@ -15,13 +15,27 @@ def validate_form(form, required_keys):
 #login route
 @app.route("/")
 def index():
-    if 'username' in session:
-        # Display stories that the user has contributed to
-        uid = user.get_user(username=session["username"])[0]
-        stories = user.get_stories(uid)
-        filtered = story.filter_stories(stories)
-        return render_template("index.html", stories=filtered)
-    return render_template("login.html")
+    if "username" not in session:
+        return redirect(url_for("login"))
+
+    message = ""
+    category = ""
+    if request.method == "POST":
+        # User has submitted a request to add onto a story
+        required_keys = ["story_id", "content"]
+        if not validate_form(request.form, required_keys):
+            return render_template("contribute.html", message="Malformed request.", category="danger")
+
+        # Add contribution to the database
+        story_id = int(request.form["story_id"])
+        content = request.form["content"]
+
+        success, message = story.update_story(session["username"], story_id, content)
+        category = "success" if success else "danger"
+
+    stories = story.get_stories()
+    filtered = story.filter_stories(stories)
+    return render_template("index.html", stories=filtered, message=message, category=category)
 
 #create a new account app route
 @app.route("/register", methods=["POST", "GET"])
@@ -79,7 +93,7 @@ def login():
         result = user.get_user(username=username, password=password)
         if result:
             session["username"] = username
-            return redirect(url_for("index"))
+            return redirect(url_for("profile"))
         return render_template("login.html", message = "Invalid credentials.", category="danger")
     return render_template("login.html")
 
@@ -104,30 +118,6 @@ def create():
         return render_template("create.html", message="Story created!", category="success")
     return render_template("create.html")
 
-@app.route("/contribute", methods=["GET", "POST"])
-def contribute():
-    if "username" not in session:
-        return redirect(url_for("login"))
-
-    message = ""
-    category = ""
-    if request.method == "POST":
-        # User has submitted a request to add onto a story
-        required_keys = ["story_id", "content"]
-        if not validate_form(request.form, required_keys):
-            return render_template("contribute.html", message="Malformed request.", category="danger")
-
-        # Add contribution to the database
-        story_id = int(request.form["story_id"])
-        content = request.form["content"]
-
-        success, message = story.update_story(session["username"], story_id, content)
-        category = "success" if success else "danger"
-
-    stories = story.get_stories()
-    filtered = story.filter_stories(stories)
-    return render_template("contribute.html", stories=filtered, message=message, category=category)
-
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     if "username" not in session:
@@ -150,11 +140,11 @@ def editprofile():
         required_keys = ["name", "aboutme"]
         if not validate_form(request.form, required_keys):
             return render_template("editprofile.html", message="Malformed request.", category="danger")
+
         user.update_profile(username, request.form['name'], request.form['aboutme'])
         return redirect(url_for('profile'))
     info = user.get_info(session['username'])
     return render_template("editprofile.html", info=info)
-        
 
 @app.route("/logout")
 def logout():
