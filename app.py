@@ -133,7 +133,10 @@ def profile():
     if "username" not in session:
         return redirect(url_for("login"))
     info = user.get_info(session['username'])
-    return render_template("profile.html", info = info)
+    uid = user.get_user(username=session["username"])[0]
+    stories = user.get_stories(uid)
+    filtered = story.filter_stories(stories)
+    return render_template("profile.html", info = info, stories = filtered)
 
 @app.route("/logout")
 def logout():

@@ -9,7 +9,22 @@
   <div class="panel panel-default">
     <div class="panel-heading">{{ info['name'] }}</div>
     <div class="panel-body">
-      fnlfndsf
+      Username: {{ info['username'] }}  <br>
+      DOB : {{ info['dob'] }} <br>
+      About Me: <br>
+      {{ info['aboutme'] }} <br>
+      <a href = '/editprofile'> Edit profile </a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading"> Stories contributed to </div>
+    <div class="panel-body">
+      {%- for story in stories %}
+      {{ story['title'] }} <br>
+      {%- endfor %}
     </div>
   </div>
 </div>
