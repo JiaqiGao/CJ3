@@ -1,5 +1,10 @@
 from flask import abort, Flask, render_template, request, redirect, url_for, session
-import datetime, os, sqlite3, db_builder, hashlib, story, user
+import datetime, os
+
+import db_builder
+import hashlib
+import story
+import user
 
 app = Flask(__name__)
 
@@ -93,23 +98,14 @@ def login():
             return render_template("login.html", message="Malformed request.", category="danger")
 
         username = request.form["username"]
-        hashed_pw = hashlib.sha1(request.form["pass"]).hexdigest()
-        
-        # Check to see if a user exists with that username/password combo
-        db = sqlite3.connect("data.db")
-        c = db.cursor()
-        c.execute("SELECT password from users where username=?", (username,))
-        #check if username is in the table         
-        if c.fetchone():
-            match = c.fetchall()
-            if match:
-                if match[0][0] == hashed_pw:
-                    session["username"] = username
-                    return redirect(url_for("profile"))
-            return render_template("login.html", message = "Invalid password", category="danger")
-        return render_template("login.html", message="Username does not exist...", add_mess="Create a new account?", category="danger")
-    else:
-        return render_template("login.html")
+        password = hashlib.sha1(request.form["pass"]).hexdigest()
+
+        result = user.get_user(username=username, password=password)
+        if result:
+            session["username"] = username
+            return redirect(url_for("profile"))
+        return render_template("login.html", message="Invalid credentials.", category="danger")
+    return render_template("login.html")
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
