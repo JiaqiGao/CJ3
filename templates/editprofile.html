@@ -8,12 +8,12 @@
 <form method="POST" action="/editprofile">
   <div class="container">
     <div class="panel panel-default">
-      <div class="panel-heading"> <input type="text" class="form-control" name="name" value={{ info['name'] }}></p> </div>
+      <div class="panel-heading"> <p> <input type="text" id="name" class="form-control" name="name" value="{{ info['name'] }}"> </p> </div>
       <div class="panel-body">
 	<p>Username: {{ info ['username'] }}</p>
 	<p>DOB : {{ info['dob'] }} </p>
 	About Me: <br>
-	<textarea class="form-control" name="aboutme" value={{ info['aboutme'] }}></textarea>
+	<textarea class="form-control" name="aboutme">{{ info['aboutme'] }} </textarea>
       </div>
     </div>
   </div>

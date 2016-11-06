@@ -61,12 +61,9 @@ def update_profile(username, name, aboutme):
     c = db.cursor()
 
     query = "UPDATE users SET name = ?, aboutme = ? WHERE username = ?"
+    print "update performed"
     c.execute(query, (name, aboutme, username,))
+    print c.fetchall()
 
     db.close()
 
-db = sqlite3.connect(DATABASE)
-c = db.cursor()
-c.execute("SELECT * FROM users WHERE username=?", ('jordan',))
-print c.fetchall()
-db.close()
