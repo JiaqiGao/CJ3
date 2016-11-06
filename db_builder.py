@@ -17,7 +17,7 @@ c.execute("CREATE TABLE IF NOT EXISTS stories (storyid INTEGER PRIMARY KEY, titl
 
 c.execute("CREATE TABLE IF NOT EXISTS updates (id INTEGER PRIMARY KEY, storyid INTEGER, userid INTEGER, timestamp INTEGER, content TEXT)")
 
-c.execute("CREATE TABLE IF NOT EXISTS profiles(id INTEGER PRIMARY KEY, name TEXT, dob INTEGER, aboutme TEXT)")
+c.execute("CREATE TABLE IF NOT EXISTS profiles(id INTEGER PRIMARY KEY, name TEXT, aboutme TEXT)")
 
 print "table created"
 
