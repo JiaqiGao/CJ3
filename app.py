@@ -10,6 +10,9 @@ import user
 #create a Flask app
 app = Flask(__name__)
 
+def validate_form(form, required_keys):
+    return set(required_keys) <= set(form)
+
 #login route
 @app.route("/")
 def index():
@@ -25,6 +28,10 @@ def index():
 def register():
     if request.method == "POST":
         # User has submitted a request to register an account
+        required_keys = ["username", "pass", "passconfirm", "bday"]
+        if not validate_form(request.form, required_keys):
+            return render_template("register.html", message="Malformed request.")
+
         username = request.form["username"]
         password = request.form["pass"]
         password_confirm = request.form["passconfirm"]
@@ -40,11 +47,15 @@ def register():
             return render_template("register.html", message="Password must contain at least one capitalized letter")
 
         now = datetime.datetime.now()
-        dob = bday.split("-")
+        try:
+            dob = map(int, bday.split("-"))
+        except:
+            return render_template("register.html", message="Invalid birthday.")
+
         if len(dob) != 3:
             return render_template("register.html", message="Invalid birthday.")
 
-        dob = datetime.datetime(int(dob[0]), int(dob[1]), int(dob[2]))
+        dob = datetime.datetime(dob[0], dob[1], dob[2])
         if int((now - dob).days / 365.25) < 13:
             return render_template("register.html", message="Users must be 13 years or older to register for an account.")
 
@@ -59,6 +70,10 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        required_keys = ["username", "pass"]
+        if not validate_form(request.form, required_keys):
+            return render_template("login.html", message="Malformed request.")
+
         username = request.form["username"]
         password = hashlib.sha1(request.form["pass"]).hexdigest()
 
@@ -76,6 +91,11 @@ def create():
 
     if request.method == "POST":
         username = session["username"]
+
+        required_keys = ["title", "content", "tags"]
+        if not validate_form(request.form, required_keys):
+            return render_template("create.html", message="Malformed request.")
+
         title = request.form["title"]
         content = request.form["content"]
         tags = request.form["tags"]
@@ -91,6 +111,10 @@ def contribute():
 
     message = ""
     if request.method == "POST":
+        required_keys = ["story_id", "content"]
+        if not validate_form(request.form, required_keys):
+            return render_template("contribute.html", message="Malformed request.")
+
         # Add contribution to the database
         story_id = int(request.form["story_id"])
         content = request.form["content"]
