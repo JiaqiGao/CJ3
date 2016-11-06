@@ -73,17 +73,20 @@ def filter_stories(stories):
     for story in stories:
         story_id = story[0]
         title = story[1]
-        updates = get_updates(story_id)
-        content = [update[4] for update in updates]
-        last_updated = datetime.datetime.fromtimestamp(updates[-1][3]).strftime("%B %d, %Y %I:%M %p")
-        last_update = updates[-1][4]
+
+        updates = []
+        for update in get_updates(story_id):
+            author = user.get_user(id=update[2])[1]
+            updates.append({
+                "author": author,
+                "timestamp": datetime.datetime.fromtimestamp(update[3]).strftime("%B %d, %Y %I:%M %p"),
+                "content": update[4]
+            })
 
         filtered.append({
             "story_id": story_id,
-            "timestamp": last_updated,
             "title": title,
-            "last_update": last_update,
-            "content": content
+            "updates": updates
         })
 
     return filtered

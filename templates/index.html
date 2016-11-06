@@ -10,9 +10,10 @@
 <div class="panel panel-default">
     <div class="panel-heading">{{ story["title"] }}</div>
     <div class="panel-body">
-        <p>{{ story["last_update"] }}</p>
-        <p>Last updated on {{ story["timestamp"] }}</p>
-        <form  class="horizontal-form" action="/contribute" method="post">
+        {% set last_update = story["updates"][-1] %}
+        <p>{{ last_update["content"] }}</p>
+        <p><small><i>Last updated by {{ last_update["author"] }} on {{ last_update["timestamp"] }}</i></small></p>
+        <form  class="horizontal-form" action="/" method="post">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">

@@ -28,10 +28,9 @@
     <div class="panel panel-default">
         <div class="panel-heading">{{ story["title"] }}</div>
         <div class="panel-body">
-            {% for update in story["content"] %}
-            {{ update }} <br>
+            {% for update in story["updates"] %}
+            {{ update["content"] }} - <small><i><a href="/profile/{{ update["author"] }}">{{ update["author"] }}</a> on {{ update["timestamp"] }}</i></small><br>
             {% endfor %}
-            <p>Last updated at {{ story["timestamp"] }}</p>
         </div>
     </div>
     {% endfor %}

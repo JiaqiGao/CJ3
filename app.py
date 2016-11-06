@@ -13,7 +13,7 @@ def validate_form(form, required_keys):
     return set(required_keys) <= set(form)
 
 #login route
-@app.route("/")
+@app.route("/", methods=["POST", "GET"])
 def index():
     if "username" not in session:
         return redirect(url_for("login"))
