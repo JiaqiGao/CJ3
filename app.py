@@ -64,13 +64,14 @@ def register():
             return render_template("register.html", message="Passwords do not match.", category="danger")
 
         if len(password) < 6:
-            return render_template("register.html", message="Password must be at least 6 characters in length", category="danger")
+            return render_template("register.html", message="Password must be at least 6 characters in length.", category="danger")
 
         if password == password.lower():
-            return render_template("register.html", message="Password must contain at least one capitalized letter", category="danger")
+            return render_template("register.html", message="Password must contain at least one capitalized letter.", category="danger")
 
         now = datetime.datetime.now()
         try:
+            # dob should be in the format "yyyy-mm-dd"
             dob = map(int, bday.split("-"))
             assert len(dob) == 3
         except:
@@ -103,7 +104,7 @@ def login():
         if result:
             session["username"] = username
             return redirect(url_for("profile"))
-        return render_template("login.html", message = "Invalid credentials.", category="danger")
+        return render_template("login.html", message="Invalid credentials.", category="danger")
     return render_template("login.html")
 
 @app.route("/create", methods=["GET", "POST"])
@@ -146,11 +147,11 @@ def profile(username=None):
         info = user.get_info(uid)
         stories = user.get_stories(uid)
         filtered = story.filter_stories(stories)
-        return render_template("profile.html", info = info, stories = filtered, me=me)
+        return render_template("profile.html", info=info, stories=filtered, me=me)
     # Invalid user
     abort(404)
 
-@app.route("/editprofile", methods = ["GET", "POST"])
+@app.route("/editprofile", methods=["GET", "POST"])
 def editprofile():
     if "username" not in session:
         return redirect(url_for("login"))
