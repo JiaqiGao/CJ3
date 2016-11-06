@@ -1,3 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Amatic+SC|Prociono');
+
+body {
+    font-family: 'Prociono', serif;	
+}
+
 .panel-body  {
     word-break: break-all
+}
+
+.story-title{
+    font-family: 'Amatic SC', cursive;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.story-text {
+    font-family: 'Amatic SC', cursive;
+    font-size: 20px;
 }

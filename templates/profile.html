@@ -15,6 +15,7 @@
             About Me: <br>
             {{ info["aboutme"] }}<br>
             {% if me %}
+	    <br>
             <a href='/editprofile'>Edit profile</a>
             {% endif %}
         </div>
@@ -26,10 +27,13 @@
     {% if me %}
     {% for story in stories %}
     <div class="panel panel-default">
-        <div class="panel-heading">{{ story["title"] }}</div>
+        <div class="panel-heading story-title">{{ story["title"] }}</div>
         <div class="panel-body">
+	  <p class="story-text">
             {% for update in story["updates"] %}
-            {{ update["content"] }} - <small><i><a href="/profile/{{ update["author"] }}">{{ update["author"] }}</a> on {{ update["timestamp"] }}</i></small><br>
+            {{ update["content"] }}
+	  </p>
+	    - <small><i><a href="/profile/{{ update["author"] }}">{{ update["author"] }}</a> on {{ update["timestamp"] }}</i></small><br>
             {% endfor %}
         </div>
     </div>
