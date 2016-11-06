@@ -33,10 +33,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="alert alert-{{category}}">
-                      {{message}}
-		      {% if add_mess %}
-		      <a href="/register">{{add_mess}}</a>
-		      {% endif %}
+                        {{message}} 
                     </div>
                 </div>
             </div>
