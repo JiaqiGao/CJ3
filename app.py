@@ -150,7 +150,6 @@ def editprofile():
         required_keys = ["name", "aboutme"]
         if not validate_form(request.form, required_keys):
             return render_template("editprofile.html", message="Malformed request.", category="danger")
-        print request.form['name']
         user.update_profile(username, request.form['name'], request.form['aboutme'])
         return redirect(url_for('profile'))
     info = user.get_info(session['username'])

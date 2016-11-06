@@ -61,9 +61,8 @@ def update_profile(username, name, aboutme):
     c = db.cursor()
 
     query = "UPDATE users SET name = ?, aboutme = ? WHERE username = ?"
-    print "update performed"
     c.execute(query, (name, aboutme, username,))
-    print c.fetchall()
-
+    
+    db.commit()
     db.close()
 
