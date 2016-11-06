@@ -7,12 +7,12 @@
 {% block body %}
 <div class="col-md-4">
     <div class="panel panel-default">
-        <div class="panel-heading">Information:</div>
+        <div class="panel-heading"><b>Profile</b></div>
         <div class="panel-body">
-            Name: {{ info["name"] }}<br>
-            Username: {{ info["username"] }}<br>
-            DOB : {{ info["dob"] }}<br>
-            About Me: <br>
+            <b>Name:</b> {{ info["name"] }}<br>
+            <b>Username:</b> {{ info["username"] }}<br>
+            <b>Birthday:</b> {{ info["dob"] }}<br>
+            <b>About Me:</b> <br>
             {{ info["aboutme"] }}<br>
             {% if me %}
 	    <br>
@@ -29,21 +29,21 @@
     <div class="panel panel-default">
         <div class="panel-heading story-title">{{ story["title"] }}</div>
         <div class="panel-body">
-	  <p class="story-text">
-            {% for update in story["updates"] %}
-            {{ update["content"] }}
+          {% for update in story["updates"] %}
+	   <p class="story-text">
+            {{ update["content"] }} <br>
 	  </p>
-	    - <small><i><a href="/profile/{{ update["author"] }}">{{ update["author"] }}</a> on {{ update["timestamp"] }}</i></small><br>
+	    - <small><i><a href="/profile/{{ update["author"] }}">{{ update["author"] }}</a> on {{ update["timestamp"] }}</i></small><br><br>
             {% endfor %}
         </div>
     </div>
     {% endfor %}
     {% else %}
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="panel panel-default story-text">
+      <div class="panel-body story-text">
             {%- for story in stories %}
-            {{ story['title'] }} <br>
-            {%- endfor %}
+          <p class="story-text"  {{ story['title'] }} </p><br>
+           {%- endfor %}
         </div>
     </div>
     {% endif %}
