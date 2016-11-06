@@ -44,8 +44,8 @@ def get_stories(uid):
     db.close()
     return result if result else []
 
-def get_info(username):
-    results = get_user(username=username)
+def get_info(uid):
+    results = get_user(id=uid)
     info = {
         'uid' : results [0],
         'username' : results[1],

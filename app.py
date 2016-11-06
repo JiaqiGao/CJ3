@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import abort, Flask, render_template, request, redirect, url_for, session
 import datetime, os
 
 import db_builder
@@ -118,15 +118,25 @@ def create():
         return render_template("create.html", message="Story created!", category="success")
     return render_template("create.html")
 
-@app.route("/profile", methods=["GET", "POST"])
-def profile():
+@app.route("/profile/")
+@app.route("/profile/<username>")
+def profile(username=None):
     if "username" not in session:
         return redirect(url_for("login"))
-    info = user.get_info(session['username'])
-    uid = user.get_user(username=session["username"])[0]
-    stories = user.get_stories(uid)
-    filtered = story.filter_stories(stories)
-    return render_template("profile.html", info = info, stories = filtered)
+
+    if not username:
+        username = session["username"]
+    me = username == session["username"]
+
+    uid = user.get_user(username=username)
+    if uid:
+        uid = uid[0]
+        info = user.get_info(uid)
+        stories = user.get_stories(uid)
+        filtered = story.filter_stories(stories)
+        return render_template("profile.html", info = info, stories = filtered, me=me)
+    # Invalid user
+    abort(404)
 
 @app.route("/editprofile", methods = ["GET", "POST"])
 def editprofile():
@@ -143,7 +153,8 @@ def editprofile():
 
         user.update_profile(username, request.form['name'], request.form['aboutme'])
         return redirect(url_for('profile'))
-    info = user.get_info(session['username'])
+    uid = user.get_user(username=session["username"])[0]
+    info = user.get_info(uid)
     return render_template("editprofile.html", info=info)
 
 @app.route("/logout")
