@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import datetime, os
 
 import db_builder
+import hashlib
 import story
 import user
 
@@ -13,7 +14,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     if 'username' in session:
-        uid = user.get_id(session["username"])
+        uid = user.get_user(username=session["username"])[0]
         stories = user.get_stories(uid)
         filtered = story.filter_stories(stories)
         return render_template("index.html", stories=filtered)
@@ -24,18 +25,18 @@ def index():
 def register():
     if request.method == "POST":
         # User has submitted a request to register an account
-        usr = request.form["username"]
-        pw = request.form["pass"]
-        pwc = request.form["passconfirm"]
+        username = request.form["username"]
+        password = request.form["pass"]
+        password_confirm = request.form["passconfirm"]
         bday = request.form["bday"]
 
-        if pw != pwc:
+        if password != password_confirm:
             return render_template("register.html", message="Passwords do not match.")
 
-        if len(pw) < 6:
+        if len(password) < 6:
             return render_template("register.html", message="Password must be at least 6 characters in length")
 
-        if pw == pw.lower():
+        if password == password.lower():
             return render_template("register.html", message="Password must contain at least one capitalized letter")
 
         now = datetime.datetime.now()
@@ -47,10 +48,10 @@ def register():
         if int((now - dob).days / 365.25) < 13:
             return render_template("register.html", message="Users must be 13 years or older to register for an account.")
 
-        if user.username_exists(usr):
+        if user.get_user(username=username):
             return render_template("register.html", message="Username is already in use.")
 
-        user.add_user(usr, pw, bday)
+        user.add_user(username, password, bday)
 
         return render_template("login.html", message="Account successfully created! You can log in now!")
     return render_template("register.html")
@@ -59,10 +60,10 @@ def register():
 def login():
     if request.method == "POST":
         username = request.form["username"]
-        password = request.form["pass"]
+        password = hashlib.sha1(request.form["pass"]).hexdigest()
 
-        success = user.authenticate(username, password)
-        if success:
+        result = user.get_user(username=username, password=password)
+        if result:
             session["username"] = username
             return redirect(url_for("index"))
         return render_template("login.html", message = "Invalid credentials.")

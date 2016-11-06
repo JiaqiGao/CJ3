@@ -6,7 +6,7 @@ import user
 DATABASE = "data.db"
 
 def create_story(username, title, content, tags):
-    uid = user.get_id(username)
+    uid = user.get_user(username=username)[0]
 
     db = sqlite3.connect(DATABASE)
     c = db.cursor()
@@ -25,7 +25,7 @@ def create_story(username, title, content, tags):
     db.close()
 
 def update_story(username, story_id, content):
-    uid = int(user.get_id(username))
+    uid = user.get_user(username=username)[0]
 
     db = sqlite3.connect(DATABASE)
     c = db.cursor()

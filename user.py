@@ -13,38 +13,25 @@ def add_user(username, password, bday):
     db.commit()
     db.close()
 
-def username_exists(username):
+def get_user(**kwargs):
+    if not kwargs:
+        return None
+
     db = sqlite3.connect(DATABASE)
     c = db.cursor()
 
-    query = "SELECT 1 FROM users WHERE username = ?"
-    c.execute(query, (username,))
+    criterion = []
+    params = []
+    for k,v in kwargs.items():
+        criterion.append("%s = ?" % k)
+        params.append(str(v))
+
+    query = "SELECT * FROM users WHERE %s" % " AND ".join(criterion)
+    c.execute(query, params)
 
     result = c.fetchone()
     db.close()
-    return result != None
-
-def authenticate(username, password):
-    db = sqlite3.connect(DATABASE)
-    c = db.cursor()
-
-    query = "SELECT 1 FROM users WHERE username = ? AND password = ?"
-    c.execute(query, (username, hashlib.sha1(password).hexdigest()))
-
-    result = c.fetchone()
-    db.close()
-    return result != None
-
-def get_id(username):
-    db = sqlite3.connect(DATABASE)
-    c = db.cursor()
-
-    query = "SELECT id FROM users WHERE username = ?"
-    c.execute(query, (username,))
-
-    result = c.fetchone()
-    db.close()
-    return result[0] if result else None
+    return result
 
 # Get all stories the user contributed to
 def get_stories(uid):
