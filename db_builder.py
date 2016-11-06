@@ -1,26 +1,14 @@
 import sqlite3
 
-#create the database
-database = "data.db"
+DATABASE = "data.db"
 
-#add to the database
-db = sqlite3.connect(database)
+def create_tables():
+    db = sqlite3.connect(DATABASE)
+    c = db.cursor()
 
-#create a cursor
-c = db.cursor()
+    c.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, dob INTEGER, name TEXT, aboutme TEXT)")
+    c.execute("CREATE TABLE IF NOT EXISTS stories (storyid INTEGER PRIMARY KEY, title TEXT, tags TEXT)")
+    c.execute("CREATE TABLE IF NOT EXISTS updates (id INTEGER PRIMARY KEY, storyid INTEGER, userid INTEGER, timestamp INTEGER, content TEXT)")
 
-#create a users table
-c.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, dob INTEGER, name TEXT, aboutme TEXT)")
-
-#create a stories table
-c.execute("CREATE TABLE IF NOT EXISTS stories (storyid INTEGER PRIMARY KEY, title TEXT, tags TEXT)")
-
-c.execute("CREATE TABLE IF NOT EXISTS updates (id INTEGER PRIMARY KEY, storyid INTEGER, userid INTEGER, timestamp INTEGER, content TEXT)")
-
-print "table created"
-
-#commit changes to he database
-db.commit()
-
-#close the database
-db.close()
+    db.commit()
+    db.close()

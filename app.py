@@ -185,6 +185,8 @@ def inject_username():
     return dict()
 
 if __name__=="__main__":
+    if not os.path.exists("data.db"):
+        db_builder.create_tables()
     app.debug = True
 
     # Generate and store secret key if it doesn't exist
