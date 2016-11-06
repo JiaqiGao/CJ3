@@ -28,7 +28,18 @@
     </nav>
 
     <body>
-        {% block body %}
-        {% endblock %}
+        <div class="container">
+            {% if message %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-{{category}}">
+                        {{message}}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% block body %}
+            {% endblock %}
+        </div>
     </body>
 </html>

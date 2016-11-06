@@ -5,27 +5,24 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    {{ message }}
-    {%- for story in stories %}
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ story["title"] }}</div>
-        <div class="panel-body">
-            <p>{{ story["last_update"] }}</p>
-            <p>Last updated on {{ story["timestamp"] }}</p>
-            <form  class="horizontal-form" action="/contribute" method="post">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <textarea class="form-control" name="content"></textarea>
-                            <input type="hidden" name="story_id" value="{{ story['story_id'] }}">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                        </div>
+{%- for story in stories %}
+<div class="panel panel-default">
+    <div class="panel-heading">{{ story["title"] }}</div>
+    <div class="panel-body">
+        <p>{{ story["last_update"] }}</p>
+        <p>Last updated on {{ story["timestamp"] }}</p>
+        <form  class="horizontal-form" action="/contribute" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <textarea class="form-control" name="content"></textarea>
+                        <input type="hidden" name="story_id" value="{{ story['story_id'] }}">
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
-    {%- endfor %}
 </div>
+{%- endfor %}
 {% endblock %}

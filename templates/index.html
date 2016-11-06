@@ -5,23 +5,20 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    {%- if username %}
-    <h3>Hello, {{ username }}</h3>
-    <h3>Stories you've contributed to:</h3>
+{%- if username %}
+<h3>Hello, {{ username }}</h3>
+<h3>Stories you've contributed to:</h3>
 
-    {%- for story in stories %}
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ story["title"] }}</div>
-        <div class="panel-body">
-            {%- for update in story["content"] %}
-            {{ update }}<br>
-            {%- endfor %}
-            <p>Last updated on {{ story["timestamp"] }}</p>
-        </div>
+{%- for story in stories %}
+<div class="panel panel-default">
+    <div class="panel-heading">{{ story["title"] }}</div>
+    <div class="panel-body">
+        {%- for update in story["content"] %}
+        {{ update }}<br>
+        {%- endfor %}
+        <p>Last updated on {{ story["timestamp"] }}</p>
     </div>
-    {%- endfor %}
-
-    {%- endif %}
 </div>
+{%- endfor %}
+{%- endif %}
 {% endblock %}

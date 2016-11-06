@@ -4,31 +4,27 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <p>{{ message }}</p>
-
-    <h1>Create a story</h1>
-    <form action="/create" method="POST">
-        <div class="row">
-            <div class="col-md-6">
-                <p>Title: <input type="text" class="form-control" name="title"></p>
-            </div>
+<h1>Create a story</h1>
+<form action="/create" method="POST">
+    <div class="row">
+        <div class="col-md-6">
+            <p>Title: <input type="text" class="form-control" name="title"></p>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>Content: <textarea class="form-control" name="content"></textarea></p>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <p>Content: <textarea class="form-control" name="content"></textarea></p>
         </div>
-	<div class="row">
-          <div class="col-md-6">
-            <p>Tags (humor,horror,thriller,mystery,etc): <input type="text" class="form-control" name="tags"></p>
-          </div>
+    </div>
+<div class="row">
+        <div class="col-md-6">
+        <p>Tags (humor,horror,thriller,mystery,etc): <input type="text" class="form-control" name="tags"></p>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <input type="submit" class="btn btn-primary">
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-primary">
         </div>
-    </form>
-</div>
+    </div>
+</form>
 {% endblock %}
