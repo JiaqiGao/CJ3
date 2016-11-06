@@ -1,4 +1,3 @@
-#all the necessary imports
 from flask import Flask, render_template, request, redirect, url_for, session
 import datetime, os
 
@@ -7,7 +6,6 @@ import hashlib
 import story
 import user
 
-#create a Flask app
 app = Flask(__name__)
 
 def validate_form(form, required_keys):
@@ -32,7 +30,7 @@ def register():
         # User has submitted a request to register an account
         required_keys = ["username", "pass", "passconfirm", "bday"]
         if not validate_form(request.form, required_keys):
-            return render_template("register.html", message="Malformed request.")
+            return render_template("register.html", message="Malformed request.", category="danger")
 
         username = request.form["username"]
         password = request.form["pass"]
@@ -40,33 +38,31 @@ def register():
         bday = request.form["bday"]
 
         if password != password_confirm:
-            return render_template("register.html", message="Passwords do not match.")
+            return render_template("register.html", message="Passwords do not match.", category="danger")
 
         if len(password) < 6:
-            return render_template("register.html", message="Password must be at least 6 characters in length")
+            return render_template("register.html", message="Password must be at least 6 characters in length", category="danger")
 
         if password == password.lower():
-            return render_template("register.html", message="Password must contain at least one capitalized letter")
+            return render_template("register.html", message="Password must contain at least one capitalized letter", category="danger")
 
         now = datetime.datetime.now()
         try:
             dob = map(int, bday.split("-"))
+            assert len(dob) == 3
         except:
-            return render_template("register.html", message="Invalid birthday.")
-
-        if len(dob) != 3:
-            return render_template("register.html", message="Invalid birthday.")
+            return render_template("register.html", message="Invalid birthday.", category="danger")
 
         dob = datetime.datetime(dob[0], dob[1], dob[2])
         if int((now - dob).days / 365.25) < 13:
-            return render_template("register.html", message="Users must be 13 years or older to register for an account.")
+            return render_template("register.html", message="Users must be 13 years or older to register for an account.", category="danger")
 
         if user.get_user(username=username):
-            return render_template("register.html", message="Username is already in use.")
+            return render_template("register.html", message="Username is already in use.", category="danger")
 
         user.add_user(username, password, bday)
 
-        return render_template("login.html", message="Account successfully created! You can log in now!")
+        return render_template("register.html", message="Account created!", category="success")
     return render_template("register.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -75,7 +71,7 @@ def login():
         # User has submitted a request to login
         required_keys = ["username", "pass"]
         if not validate_form(request.form, required_keys):
-            return render_template("login.html", message="Malformed request.")
+            return render_template("login.html", message="Malformed request.", category="danger")
 
         username = request.form["username"]
         password = hashlib.sha1(request.form["pass"]).hexdigest()
@@ -84,7 +80,7 @@ def login():
         if result:
             session["username"] = username
             return redirect(url_for("index"))
-        return render_template("login.html", message = "Invalid credentials.")
+        return render_template("login.html", message = "Invalid credentials.", category="danger")
     return render_template("login.html")
 
 @app.route("/create", methods=["GET", "POST"])
@@ -98,14 +94,14 @@ def create():
 
         required_keys = ["title", "content", "tags"]
         if not validate_form(request.form, required_keys):
-            return render_template("create.html", message="Malformed request.")
+            return render_template("create.html", message="Malformed request.", category="danger")
 
         title = request.form["title"]
         content = request.form["content"]
         tags = request.form["tags"]
 
         story.create_story(username, title, content, tags)
-        return render_template("create.html", message="Story created!")
+        return render_template("create.html", message="Story created!", category="success")
     return render_template("create.html")
 
 @app.route("/contribute", methods=["GET", "POST"])
@@ -114,21 +110,23 @@ def contribute():
         return redirect(url_for("login"))
 
     message = ""
+    category = ""
     if request.method == "POST":
         # User has submitted a request to add onto a story
         required_keys = ["story_id", "content"]
         if not validate_form(request.form, required_keys):
-            return render_template("contribute.html", message="Malformed request.")
+            return render_template("contribute.html", message="Malformed request.", category="danger")
 
         # Add contribution to the database
         story_id = int(request.form["story_id"])
         content = request.form["content"]
 
-        message = story.update_story(session["username"], story_id, content)
+        success, message = story.update_story(session["username"], story_id, content)
+        category = "success" if success else "danger"
 
     stories = story.get_stories()
     filtered = story.filter_stories(stories)
-    return render_template("contribute.html", stories=filtered, message=message)
+    return render_template("contribute.html", stories=filtered, message=message, category=category)
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
