@@ -7,8 +7,8 @@ def add_user(username, password, bday):
     db = sqlite3.connect(DATABASE)
     c = db.cursor()
 
-    query = "INSERT INTO users VALUES (NULL, ?, ?, ?)"
-    c.execute(query, (username, hashlib.sha1(password).hexdigest(), bday,))
+    query = "INSERT INTO users VALUES (NULL, ?, ?, ?, ?, ?)"
+    c.execute(query, (username, hashlib.sha1(password).hexdigest(), bday, '', '',))
 
     db.commit()
     db.close()

@@ -10,14 +10,12 @@ db = sqlite3.connect(database)
 c = db.cursor()
 
 #create a users table
-c.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, dob INTEGER)")
+c.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, dob INTEGER, name TEXT, aboutme TEXT)")
 
 #create a stories table
 c.execute("CREATE TABLE IF NOT EXISTS stories (storyid INTEGER PRIMARY KEY, title TEXT, tags TEXT)")
 
 c.execute("CREATE TABLE IF NOT EXISTS updates (id INTEGER PRIMARY KEY, storyid INTEGER, userid INTEGER, timestamp INTEGER, content TEXT)")
-
-c.execute("CREATE TABLE IF NOT EXISTS profiles(id INTEGER PRIMARY KEY, name TEXT, aboutme TEXT)")
 
 print "table created"
 
