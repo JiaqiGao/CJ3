@@ -118,18 +118,17 @@ def create():
         # User has submitted a request to create a story
         username = session["username"]
 
-        required_keys = ["title", "content", "tags"]
+        required_keys = ["title", "content"]
         if not validate_form(request.form, required_keys):
             return render_template("create.html", message="Malformed request.", category="danger")
 
         title = request.form["title"]
         content = request.form["content"]
-        tags = request.form["tags"]
 
         if len(content) > 150:
             return render_template("create.html", message="Content should be less than or equal to 150 characters.", category="danger")
 
-        story.create_story(username, title, content, tags)
+        story.create_story(username, title, content)
         return render_template("create.html", message="Story created!", category="success")
     return render_template("create.html")
 

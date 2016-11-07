@@ -5,14 +5,14 @@ import user
 
 DATABASE = "data.db"
 
-def create_story(username, title, content, tags):
+def create_story(username, title, content):
     uid = user.get_user(username=username)[0]
 
     db = sqlite3.connect(DATABASE)
     c = db.cursor()
 
-    query = "INSERT INTO stories VALUES (NULL, ?, ?)"
-    c.execute(query, (title, tags,))
+    query = "INSERT INTO stories VALUES (NULL, ?)"
+    c.execute(query, (title,))
 
     # Fetch primary key of newly inserted row
     storyid = c.lastrowid
