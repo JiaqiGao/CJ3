@@ -8,7 +8,7 @@ def add_user(username, password, bday):
     c = db.cursor()
 
     query = "INSERT INTO users VALUES (NULL, ?, ?, ?, ?, ?)"
-    c.execute(query, (username, hashlib.sha1(password).hexdigest(), bday, 'Name not added', 'Not created',))
+    c.execute(query, (username, hashlib.sha1(password).hexdigest(), bday, '', '',))
 
     db.commit()
     db.close()
