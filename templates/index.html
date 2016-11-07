@@ -12,7 +12,7 @@
     <div class="panel-body">
         {% set last_update = story["updates"][-1] %}
         <p class="story-text">{{ last_update["content"] }}</p>
-        <p><small><i>Last updated by {{ last_update["author"] }} on {{ last_update["timestamp"] }}</i></small></p>
+        <p><i>Last updated by {{ last_update["author"] }} on {{ last_update["timestamp"] }}</i></p>
         <form  class="horizontal-form" action="/" method="post">
             <div class="row">
                 <div class="col-md-6">
