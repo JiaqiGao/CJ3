@@ -74,10 +74,10 @@ def register():
             # dob should be in the format "yyyy-mm-dd"
             dob = map(int, bday.split("-"))
             assert len(dob) == 3
+            dob = datetime.datetime(dob[0], dob[1], dob[2])
         except:
             return render_template("register.html", message="Invalid birthday.", category="danger")
 
-        dob = datetime.datetime(dob[0], dob[1], dob[2])
         if int((now - dob).days / 365.25) < 13:
             return render_template("register.html", message="Users must be 13 years or older to register for an account.", category="danger")
 
