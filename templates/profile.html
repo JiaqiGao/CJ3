@@ -30,9 +30,9 @@
         <div class="panel-heading story-title">{{ story["title"] }}</div>
         <div class="panel-body">
           {% for update in story["updates"] %}
-	   <p class="story-text">
+            <p class="story-text">
             {{ update["content"] }} <br>
-	  </p>
+            </p>
 	    - <small><i><a href="/profile/{{ update["author"] }}">{{ update["author"] }}</a> on {{ update["timestamp"] }}</i></small><br><br>
             {% endfor %}
         </div>
@@ -42,8 +42,8 @@
     <div class="panel panel-default story-text">
       <div class="panel-body story-text">
             {%- for story in stories %}
-          <p class="story-text"  {{ story['title'] }} </p><br>
-           {%- endfor %}
+            <p class="story-text">{{ story['title'] }}</p><br>
+            {%- endfor %}
         </div>
     </div>
     {% endif %}
