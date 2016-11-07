@@ -4,6 +4,7 @@ import datetime, os
 import db_builder
 import hashlib
 import story
+import sys
 import user
 
 app = Flask(__name__)
@@ -12,7 +13,6 @@ def validate_form(form, required_keys):
     """ Check if a dictionary contains all the required keys """
     return set(required_keys) <= set(form)
 
-#login route
 @app.route("/", methods=["POST", "GET"])
 def index():
     if "username" not in session:
@@ -43,7 +43,6 @@ def index():
 
     return render_template("index.html", stories=filtered)
 
-#create a new account app route
 @app.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "POST":
@@ -158,7 +157,7 @@ def editprofile():
         return redirect(url_for("login"))
 
     if request.method == "POST":
-        # User has submitted a request to create a story
+        # User has submitted a request to edit their profile
         username = session["username"]
 
         required_keys = ["name", "aboutme"]
@@ -167,6 +166,7 @@ def editprofile():
 
         user.update_profile(username, request.form['name'], request.form['aboutme'])
         return redirect(url_for('profile'))
+
     uid = user.get_user(username=session["username"])[0]
     info = user.get_info(uid)
     return render_template("editprofile.html", info=info)
@@ -186,7 +186,8 @@ def inject_username():
 if __name__=="__main__":
     if not os.path.exists("data.db"):
         db_builder.create_tables()
-    app.debug = True
+
+    app.debug = "--debug" in sys.argv
 
     # Generate and store secret key if it doesn't exist
     with open(".secret_key", "a+b") as f:
