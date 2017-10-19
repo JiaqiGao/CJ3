@@ -4,6 +4,7 @@ import datetime, os
 import db_builder
 import hashlib
 import story
+import sys
 import user
 
 app = Flask(__name__)
@@ -12,7 +13,6 @@ def validate_form(form, required_keys):
     """ Check if a dictionary contains all the required keys """
     return set(required_keys) <= set(form)
 
-#login route
 @app.route("/", methods=["POST", "GET"])
 def index():
     if "username" not in session:
@@ -43,7 +43,6 @@ def index():
 
     return render_template("index.html", stories=filtered)
 
-#create a new account app route
 @app.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "POST":
@@ -74,10 +73,10 @@ def register():
             # dob should be in the format "yyyy-mm-dd"
             dob = map(int, bday.split("-"))
             assert len(dob) == 3
+            dob = datetime.datetime(dob[0], dob[1], dob[2])
         except:
             return render_template("register.html", message="Invalid birthday.", category="danger")
 
-        dob = datetime.datetime(dob[0], dob[1], dob[2])
         if int((now - dob).days / 365.25) < 13:
             return render_template("register.html", message="Users must be 13 years or older to register for an account.", category="danger")
 
@@ -118,18 +117,17 @@ def create():
         # User has submitted a request to create a story
         username = session["username"]
 
-        required_keys = ["title", "content", "tags"]
+        required_keys = ["title", "content"]
         if not validate_form(request.form, required_keys):
             return render_template("create.html", message="Malformed request.", category="danger")
 
         title = request.form["title"]
         content = request.form["content"]
-        tags = request.form["tags"]
 
         if len(content) > 150:
             return render_template("create.html", message="Content should be less than or equal to 150 characters.", category="danger")
 
-        story.create_story(username, title, content, tags)
+        story.create_story(username, title, content)
         return render_template("create.html", message="Story created!", category="success")
     return render_template("create.html")
 
@@ -159,7 +157,7 @@ def editprofile():
         return redirect(url_for("login"))
 
     if request.method == "POST":
-        # User has submitted a request to create a story
+        # User has submitted a request to edit their profile
         username = session["username"]
 
         required_keys = ["name", "aboutme"]
@@ -168,6 +166,7 @@ def editprofile():
 
         user.update_profile(username, request.form['name'], request.form['aboutme'])
         return redirect(url_for('profile'))
+
     uid = user.get_user(username=session["username"])[0]
     info = user.get_info(uid)
     return render_template("editprofile.html", info=info)
@@ -187,7 +186,8 @@ def inject_username():
 if __name__=="__main__":
     if not os.path.exists("data.db"):
         db_builder.create_tables()
-    app.debug = True
+
+    app.debug = "--debug" in sys.argv
 
     # Generate and store secret key if it doesn't exist
     with open(".secret_key", "a+b") as f:
