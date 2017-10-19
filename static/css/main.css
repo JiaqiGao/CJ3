@@ -2,7 +2,6 @@
 
 body {
     font-family: 'Prociono', serif;
-    font-size: 10em;
 }
 
 .panel-body  {
@@ -12,10 +11,10 @@ body {
 .story-title{
     font-family: 'Amatic SC', cursive;
     font-weight: bold;
-    font-size: 5em;
+    font-size: 30px;
 }
 
 .story-text {
     /* font-family: 'Amatic SC', cursive; */
-    font-size: 5em;
+    font-size: 20px;
 }
